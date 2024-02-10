@@ -11,8 +11,8 @@ const StartPage: FC = () => {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/" element={<ListServices />} />
-        <Route path='services/:service_id/' element={<ServicePage />} />
+        <Route path="/labs-bmstu-2023-dia-frontend/" element={<ListServices />} />
+        <Route path='/labs-bmstu-2023-dia-frontend/services/:service_id/' element={<ServicePage />} />
       </Routes>
       <Footer />
     </BrowserRouter>

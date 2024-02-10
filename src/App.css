@@ -311,3 +311,7 @@ label {
 li {
     list-style-type: none;
 }
+
+.card-service-btn-delete {
+    display: none;
+}

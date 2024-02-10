@@ -22,12 +22,12 @@ const ServiceCard: FC<ServiceShortInfoProps> = (props) => {
     const navigate = useNavigate();
 
     const handleButtonInfoClick = () => {
-        navigate(`/services/${props.data.id}/`);
+        navigate(`/labs-bmstu-2023-dia-frontend/services/${props.data.id}/`);
     }
 
     const handleButtonDeleteClick = () => {
         // нужно добавить удаление услуги  
-        navigate(`/services/${props.data.id}/`);
+        navigate(`/labs-bmstu-2023-dia-frontend/services/${props.data.id}/`);
     }
 
     return (

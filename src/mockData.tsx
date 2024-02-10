@@ -42,7 +42,7 @@ export const mock_services: Service[] = [
         date_start: "2024-02-07 12:18:50.946000 +00:00", date_end: "2024-02-10 12:18:50.946000 +00:00"
     },
     {
-        id: 5, job: "Преподаватель в средней школе", img: image5, about: "Объяснить тригонометрические уравнения, первый замечательный предел",
+        id: 5, job: "Преподаватель", img: image5, about: "Объяснить тригонометрические уравнения, первый замечательный предел",
         age: 14, sex: "A", rus_passport: false, insurance: false, status: true, salary: 2500,
         date_start: "2024-02-07 12:18:50.946000 +00:00", date_end: "2024-02-07 12:18:50.946000 +00:00"
     }
@@ -52,7 +52,7 @@ export const mock_services: Service[] = [
 export const mock_services_short_info: Service[] = [
     {
         id: 1, job: "Программист", img: image1, age: 19, salary: 300, 
-        date_start: "2024-02-05 15:17:46.000000 +00:00", date_end: "2024-02-21 15:17:51.000000 +00:00"
+        date_start: "2024-02-07 12:18:50.946000 +00:00", date_end: "2024-02-10 12:18:50.946000 +00:00"
     },
     {
         id: 2, job: "Фотограф", img: image2, age: 14, salary: 2500, 
@@ -67,7 +67,7 @@ export const mock_services_short_info: Service[] = [
         date_start: "2024-02-07 12:18:50.946000 +00:00", date_end: "2024-02-10 12:18:50.946000 +00:00"
     },
     {
-        id: 5, job: "Преподаватель в средней школе", img: image5, age: 14, salary: 2500,
+        id: 5, job: "Преподаватель", img: image5, age: 14, salary: 2500,
         date_start: "2024-02-07 12:18:50.946000 +00:00", date_end: "2024-02-07 12:18:50.946000 +00:00"
     }
 ];

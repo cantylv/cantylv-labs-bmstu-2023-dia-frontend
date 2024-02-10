@@ -27,18 +27,18 @@ const DetailsPage: FC = () => {
   }, []);
 
   const breadcrumbsLinks: BreadcrumbLink[] = [
-    { label: 'Список услуг', url: '/' },
-    { label: service.job || '', url: `/services/${service_id}` },
+    { label: 'Список услуг', url: '/labs-bmstu-2023-dia-frontend/' },
+    { label: service.job || '', url: `/labs-bmstu-2023-dia-frontend/services/${service_id}` },
   ];
 
   const handleButtonBackClick = () => {
-    navigate('/');
+    navigate('/labs-bmstu-2023-dia-frontend/');
   }
 
   return (
 
     <div className="container">
-      <Link to="/">
+      <Link to="/labs-bmstu-2023-dia-frontend/">
         <Button className="btn-home btn" onClick={handleButtonBackClick}>Hазад</Button>
       </Link>
 
