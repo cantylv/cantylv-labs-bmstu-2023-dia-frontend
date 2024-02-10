@@ -11,6 +11,6 @@ export default defineConfig({
       }
     }
   },
-  base: "/labs-bmstu-2023-dia-frontend",
+  base: "/labs-bmstu-2023-dia-frontend/",
   plugins: [react()],
 })
