@@ -1,8 +1,7 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from 'react-bootstrap'
-
-import moment from 'moment' // для преобразования DateTimeField в формат day hh:mm
+import moment from 'moment'
 
 export interface ServiceShortInfoProps {
     data: {
@@ -48,10 +47,10 @@ const ServiceCard: FC<ServiceShortInfoProps> = (props) => {
                 <div className="card-service-short-info-salary-ans card-title-ans">{props.data.salary} RUB</div>
 
                 <div className="card-service-short-info-time-start card-title">Начало работы</div>
-                <div className="card-service-short-info-time-start-ans card-title-ans">{moment(props.data.date_start).format('YYYY-MM-DD HH:mm')}</div>
+                <div className="card-service-short-info-time-start-ans card-title-ans">{moment(props.data.date_start).format('YYYY.MM.DD в HH:mm')}</div>
 
                 <div className="card-service-short-info-time-end card-title">Конец работы</div>
-                <div className="card-service-short-info-time-end-ans card-title-ans">{moment(props.data.date_end).format('YYYY-MM-DD HH:mm')}</div>
+                <div className="card-service-short-info-time-end-ans card-title-ans">{moment(props.data.date_end).format('YYYY.MM.DD в HH:mm')}</div>
             </div>
 
             <div className="btns">
