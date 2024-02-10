@@ -14,19 +14,19 @@ function Footer() {
             <div className="social-media">
                 <ul className="footer-nav-list">
                     <li className="footer-nav-list-item">
-                        <a className="footer-nav-list-item-icon" href="https://t.me/cantylv">
+                        <Link className="footer-nav-list-item-icon" to="https://t.me/cantylv">
                             <img src={tgIcon} alt="tg" />
-                        </a>
+                        </Link>
                     </li>
                     <li className="footer-nav-list-item">
-                        <a className="footer-nav-list-item-icon" href="https://vk.com/tussan_pussan">
+                        <Link className="footer-nav-list-item-icon" to="https://vk.com/tussan_pussan">
                             <img src={vkIcon} alt="vk" />
-                        </a>
+                        </Link>
                     </li>
                     <li className="footer-nav-list-item">
-                        <a className="footer-nav-list-item-icon" href="https://github.com/cantylv">
+                        <Link className="footer-nav-list-item-icon" to="https://github.com/cantylv">
                             <img src={githubIcon} alt="github" />
-                        </a>
+                        </Link>
                     </li>
                 </ul>
             </div>

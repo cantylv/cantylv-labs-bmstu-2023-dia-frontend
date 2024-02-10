@@ -17,8 +17,8 @@ function Header() {
                 <div className='page-links'>
                     <Nav.Link href="#lk">Личный кабинет</Nav.Link>
                     <Nav.Link href="/">Список услуг</Nav.Link>
-                    <Nav.Link href="#list_bid">Список заявок</Nav.Link>
-                    <Nav.Link href="#about">О нас</Nav.Link>
+                    <Nav.Link href="#list_bid">Мои заявок</Nav.Link>
+                    <Nav.Link href="#about">О компании</Nav.Link>
                 </div>
             </div>
 

@@ -63,7 +63,9 @@ const DetailsPage: FC = () => {
           <div className="card-service-short-info-salary-ans card-title-ans">{service.salary}</div>
 
           <div className="card-service-short-info-sex card-title card-title">Пол:</div>
-          <div className="card-service-short-info-sex-ans card-title-ans">{service.sex}</div>
+          <div className="card-service-short-info-sex-ans card-title-ans">
+            {service.sex === 'A' ? 'Не важно' : service.sex === 'M' ? 'Мужской' : 'Женский'}
+          </div>
 
           <div className="card-service-short-info-date-start card-title">Начало работы:</div>
           <div className="card-service-short-info-date-start-ans card-title-ans">{moment(service.date_start).format('DD.MM.YYYY в hh:mm')}</div>
@@ -72,10 +74,14 @@ const DetailsPage: FC = () => {
           <div className="card-service-short-info-date-end-ans card-title-ans">{moment(service.date_end).format('DD.MM.YYYY в hh:mm')}</div>
 
           <div className="card-service-short-info-rus card-title">Наличие русского гражданства:</div>
-          <div className="card-service-short-info-rus-ans card-title-ans">{service.rus_passport} </div>
+          <div className="card-service-short-info-rus-ans card-title-ans">
+            {service.rus_passport ? "Необходимо" : "Нет необходимости"}
+          </div>
 
           <div className="card-service-short-info-ins card-title">Наличие медицинской страховки:</div>
-          <div className="card-service-short-info-ins-ans card-title-ans title-last-ans">{service.insurance}</div>
+          <div className="card-service-short-info-ins-ans card-title-ans title-last-ans">
+            {service.insurance ? "Необходимо" : "Нет необходимости"}
+          </div>
         </div>
       </div>
     </div>

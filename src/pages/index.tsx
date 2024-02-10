@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import ServiceCard from "../components/card/element";
 import Breadcrumbs, { BreadcrumbLink } from '../components/breadcrumb/element';
 import { Service, mock_services_short_info } from '../mockData';
+import { Button } from "react-bootstrap";
 
 const ListServices: FC = () => {
 
@@ -54,7 +55,7 @@ const ListServices: FC = () => {
             </div>
             <form id="filterForm">
                 <input id="filter_input" value={searchText} name="search" type="text" placeholder="Поиск..." onChange={(event) => { setSearchText(event.target.value) }} />
-                <button className="btn-search btn" type="button" onClick={searchButtonHandler}>Найти</button>
+                <Button className="btn-search btn" type="button" onClick={searchButtonHandler}>Найти</Button>
             </form>
             <Breadcrumbs links={breadcrumbsLinks} />
             <div className="services">
