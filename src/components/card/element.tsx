@@ -48,10 +48,10 @@ const ServiceCard: FC<ServiceShortInfoProps> = (props) => {
                 <div className="card-service-short-info-salary-ans card-title-ans">{props.data.salary} RUB</div>
 
                 <div className="card-service-short-info-time-start card-title">Начало работы</div>
-                <div className="card-service-short-info-time-start-ans card-title-ans">{moment(props.data.date_start).format('DD.MM.YYYY в hh:mm')}</div>
+                <div className="card-service-short-info-time-start-ans card-title-ans">{moment(props.data.date_start).format('YYYY-MM-DD HH:mm')}</div>
 
                 <div className="card-service-short-info-time-end card-title">Конец работы</div>
-                <div className="card-service-short-info-time-end-ans card-title-ans">{moment(props.data.date_end).format('DD.MM.YYYY в hh:mm')}</div>
+                <div className="card-service-short-info-time-end-ans card-title-ans">{moment(props.data.date_end).format('YYYY-MM-DD HH:mm')}</div>
             </div>
 
             <div className="btns">
