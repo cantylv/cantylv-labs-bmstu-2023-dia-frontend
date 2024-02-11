@@ -279,7 +279,7 @@ label {
     border: 1px solid #d64df8;
     border-radius: 4px;
     margin-right: 10px;
-    width: 250px;
+    width: 150px;
 }
 
 
@@ -314,4 +314,47 @@ li {
 
 .card-service-btn-delete {
     display: none;
+}
+
+.datepicker {
+    padding: 10.25px 8px 10.25px 8px;
+    font-size: 0.9rem;
+    border: 1px solid #d64df8;
+    border-radius: 4px;
+    margin-right: 10px;
+    margin-left: 10px;
+    width: 75px;
+}
+
+.filterTime {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: baseline;
+}
+
+.filterMenu {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 100px;
+    align-items: baseline;
+}
+
+.textDateStart {
+    font-size: 15px;
+}
+
+.textDateEnd {
+    font-size: 15px;
+}
+
+.salaryBlock {
+    padding: 10.25px 8px 10.25px 8px;
+    font-size: 0.9rem;
+    border: 1px solid #d64df8;
+    border-radius: 4px;
+    margin-right: 10px;
+    margin-left: 10px;
+    width: 40px;
 }

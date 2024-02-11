@@ -68,10 +68,10 @@ const DetailsPage: FC = () => {
           </div>
 
           <div className="card-service-short-info-date-start card-title">Начало работы:</div>
-          <div className="card-service-short-info-date-start-ans card-title-ans">{moment(service.date_start).format('YYYY.MM.DD в HH:mm')}</div>
+          <div className="card-service-short-info-date-start-ans card-title-ans">{moment(service.date_start).format('MM/DD/YYYY в HH:mm')}</div>
 
           <div className="card-service-short-info-date-end card-title">Конец работы:</div>
-          <div className="card-service-short-info-date-end-ans card-title-ans">{moment(service.date_end).format('YYYY.MM.DD в HH:mm')}</div>
+          <div className="card-service-short-info-date-end-ans card-title-ans">{moment(service.date_end).format('MM/DD/YYYY в HH:mm')}</div>
 
           <div className="card-service-short-info-rus card-title">Наличие русского гражданства:</div>
           <div className="card-service-short-info-rus-ans card-title-ans">
