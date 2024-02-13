@@ -53,10 +53,10 @@ const ListServices: FC = () => {
             params.append('date_end', endDate.toISOString());
         }
         if (salaryStart) {
-            params.append('date_end', salaryStart.toString());
+            params.append('salary_start', salaryStart.toString());
         }
         if (salaryEnd) {
-            params.append('date_end', salaryEnd.toString());
+            params.append('salary_end', salaryEnd.toString());
         }
     
         // Добавляем параметры к URL

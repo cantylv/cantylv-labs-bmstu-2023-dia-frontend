@@ -23,8 +23,8 @@ function Header() {
             </div>
 
             <div className='block-auth'>
-                <Button className='block-auth-btn' onClick={() => { navigate(`/labs-bmstu-2023-dia-frontend/`) }}>Регистрация</Button>
-                <Button className='block-auth-btn' onClick={() => { navigate(`/labs-bmstu-2023-dia-frontend/`) }}>Вход</Button>
+                <Button className='block-auth-btn' onClick={() => { navigate(`/labs-bmstu-2023-dia-frontend/reg/`) }}>Регистрация</Button>
+                <Button className='block-auth-btn' onClick={() => { navigate(`/labs-bmstu-2023-dia-frontend/login/`) }}>Вход</Button>
             </div>
 
         </Navbar>

@@ -358,3 +358,42 @@ li {
     margin-left: 10px;
     width: 40px;
 }
+
+.registrationFormBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.registrationFormField {
+    padding: 10.25px 8px 10.25px 8px;
+    font-size: 0.9rem;
+    border: 1px solid #d64df8;
+    border-radius: 4px;
+    margin-right: 10px;
+    margin-left: 10px;
+    width: 200px;
+}
+
+.titleRegistration {
+    margin-bottom: 30px;
+    margin-left: 10px;
+}
+
+.btnLogin {
+    margin-top: 20px;
+    margin-left: 10px;
+    background-color: #d032f8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.registrationFormWarningText {
+    color: red;
+    margin-left: 10px;
+    font-size: 12px;
+}
