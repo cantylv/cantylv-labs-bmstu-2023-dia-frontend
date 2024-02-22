@@ -1,60 +1,82 @@
-import { FC } from 'react'
-// import { useDispatch} from 'react-redux';
-// import { useEffect, useState } from 'react';
-import ListServices from './pages/index.tsx'
-import ServicePage from './pages/service.tsx'
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import Header from './components/header/element.tsx'
-import Footer from './components/footer/element.tsx'
-import './App.css'
+//////// библиотека
+import { FC } from 'react';
+import { useDispatch } from 'react-redux'; // принимает action, вызывает reducer, reducer меняет состояние store
+import { useEffect, useState } from 'react'; // хуки, которые отвечают за состояние функционального компонента
+import { Routes, Route, BrowserRouter } from 'react-router-dom'; // необходимо для навигации между страницами
 
-import RegistrationPage from './pages/Registration';
-import LoginPage from './pages/Login';
-// import {loginUser} from './store/slices/auth_slices'
+//////// страницы
+import ListServicesPage from './pages/ServiceList/index.tsx'; // список услуг
+import ServiceDetailPage from './pages/ServiceDetail/index.tsx'; // страница с услугой (админ сможет редактировать)
+
+import BidListPage from './pages/BidTable/index.tsx'; // список заявок
+import BidDetailPage from './pages/BidDetail/index.tsx'; // страница заявки
+
+import RegistrationPage from './pages/Registration'; // форма с регистрацией
+import LoginPage from './pages/Login'; // форма логина
+
+//////// элементы страницы
+import Header from './components/index/element.tsx';
+import Footer from './components/footer/index.tsx';
+
+/////// действия стора
+import { login } from './store/slices/authSlice.tsx'; // авторизованность пользователя и его права
+
+import './App.css';
 
 const StartPage: FC = () => {
-  // const dispatch = useDispatch();
-  // const [auth, setAuth] = useState(false);
-  // const [admin, setAdmin] = useState(false)
+  const dispatch = useDispatch();
+  const [isAuth, setIsAuth] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  // useEffect(() => {
-  //   const is_auth = Boolean(localStorage.getItem('auth')) === true;
-  //   setAuth(is_auth);
-  //   const is_manager = Boolean(localStorage.getItem('admin')) === true;
-  //   setAdmin(is_manager);
-  //   const username = localStorage.getItem('username');
-  //   if (is_auth === true) {
-  //     dispatch(loginUser({ is_admin: is_manager, username: username }));
-  //   }
-  // }, [dispatch]);
+  useEffect(() => {
+    const auth = Boolean(localStorage.getItem('isAuth')); // Boolean(null) == false
+    setIsAuth(auth);
+
+    const admin = Boolean(localStorage.getItem('isAdmin'));
+    setIsAdmin(admin);
+
+    let username = localStorage.getItem('username');
+    username = !username ? '' : username;
+
+    if (isAuth) {
+      dispatch(
+        login({
+          isAdmin: isAdmin,
+          username: username,
+        })
+      );
+    }
+  }, [dispatch, localStorage]); // если пользователь что-то сделает с localStorage, контент поменяется
 
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/labs-bmstu-2023-dia-frontend/" element={<ListServices />} />
-        <Route path='/labs-bmstu-2023-dia-frontend/services/:service_id/' element={<ServicePage />} />
-
-        <Route path='/labs-bmstu-2023-dia-frontend/login/' element={<LoginPage/>}/>
-        <Route path='/labs-bmstu-2023-dia-frontend/reg/' element={<RegistrationPage/>}/> 
-
-        {/* {admin && (
+        <Route path="/" element={<ListServicesPage />} />
+        <Route path="/services/:service_id/" element={<ServiceDetailPage />} />
+        {!isAuth && (
           <>
-            <Route path='/weather_station_frontend/phenomens/edit/' element={<PhenomenTable/>}/>
-            <Route path='/weather_station_frontend/phenomens/edit/:id/' element={<PhenomenEdit/>}/>
+            <Route path="/login/" element={<LoginPage />} />
+            <Route path="/reg/" element={<RegistrationPage />} />
           </>
         )}
-          
-        {auth && (
-            <>
-            <Route path='/weather_station_frontend/requests/' element={<RequestsPage/>}/>
-            <Route path='/weather_station_frontend/requests/:id/' element={<OneRequestPage/>}/>
-            </>
-          )} */}
+        {isAuth && (
+          <>
+            <Route path="/bids/" element={<BidListPage />} />
+            <Route path="/bids/:bid_id/" element={<BidDetailPage />} />
+          </>
+        )}
+        {isAdmin && (
+          <>
+            <Route
+              path="/services/:service_id/edit/" element={<BidDetailPage />}
+            />
+          </>
+        )}
       </Routes>
       <Footer />
     </BrowserRouter>
-  )
-}
+  );
+};
 
-export default StartPage
+export default StartPage;

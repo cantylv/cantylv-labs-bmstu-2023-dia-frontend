@@ -365,7 +365,11 @@ li {
     gap: 20px;
 }
 
-.registrationFormField {
+.registrationForm {
+    margin-left: 20px;
+}
+
+.FormField {
     padding: 10.25px 8px 10.25px 8px;
     font-size: 0.9rem;
     border: 1px solid #d64df8;
@@ -381,6 +385,17 @@ li {
 }
 
 .btnLogin {
+    margin-left: 10px;
+    background-color: #d032f8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btnReg {
     margin-top: 20px;
     margin-left: 10px;
     background-color: #d032f8;
@@ -396,4 +411,16 @@ li {
     color: red;
     margin-left: 10px;
     font-size: 12px;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 200px;
+    margin-left: 20px;
+}
+
+.titleLogin {
+    margin-left: 10px;
 }

@@ -1,149 +1,76 @@
+// Страница для регистрации 
+// Страница доступна только неавторизованному пользователю 
+
+
 import { FC, useState } from 'react';
-import { Form } from 'react-bootstrap';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-
-interface SignUpProps {
-  username: string;
-  first_name: string;
-  second_name: string;
-  email: string;
-  password: string;
-  phone: string;
-  setUsername: (username: string) => void;
-  setFirstName: (first_name: string) => void;
-  setSecondName: (second_name: string) => void;
-  setEmail: (email: string) => void;
-  setPassword: (password: string) => void;
-  setPhone: (phone: string) => void;
-  submitHandler: (event: any) => void;
-}
-
-const Signup: FC<SignUpProps> = ({
-  username,
-  first_name,
-  second_name,
-  email,
-  password,
-  phone,
-  setUsername,
-  setFirstName,
-  setSecondName,
-  setEmail,
-  setPassword,
-  setPhone,
-  submitHandler,
-}) => {
-  return (
-    <>
-      <Form className="registrationForm container" onSubmit={submitHandler}>
-        <h1 className="titleRegistration">Регистрация</h1>
-        <div className="registrationFormBlock">
-          <input
-            type="text"
-            onChange={(event) => setFirstName(event.target.value)}
-            placeholder="Имя"
-            value={first_name}
-            className="registrationFormField"
-          />
-          <input
-            type="text"
-            onChange={(event) => setSecondName(event.target.value)}
-            placeholder="Фамилия"
-            value={second_name}
-            className="registrationFormField"
-          />
-          <div>
-            <input
-              type="text"
-              onChange={(event) => setUsername(event.target.value)}
-              placeholder="Никнейм"
-              value={username}
-              className="registrationFormField"
-            />
-            <span className="registrationFormWarningText">* Обязательно</span>
-          </div>
-          <input
-            type="text"
-            onChange={(event) => setPhone(event.target.value)}
-            placeholder="Номер телефона"
-            value={phone}
-            className="registrationFormField"
-          />
-          <input
-            type="text"
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="Почта"
-            value={email}
-            className="registrationFormField"
-          />
-          <div>
-            <input
-              type="password"
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="Пароль"
-              value={password}
-              className="registrationFormField"
-            />
-            <span className="registrationFormWarningText">* Обязательно</span>
-          </div>
-        </div>
-        <button className="btnLogin" type="submit" onClick={submitHandler}>
-          Зарегистрироваться
-        </button>
-      </Form>
-    </>
-  );
-};
-
+import { useDispatch } from 'react-redux';
+import RegistrationForm from '../../components/regForm';
+import { login } from '../../store/slices/authSlice';
 
 const RegistrationPage: FC = () => {
-  const [first_name, setFirstName] = useState('');
-  const [second_name, setSecondName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [secondName, setSecondName] = useState('');
   const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = async () => {
     try {
-      event.preventDefault();
-      await axios.post(`/api/v1/auth/user/`, {
-        first_name: first_name,
-        second_name: second_name,
+      const response = await axios.post(`/api/v1/user/`, {
+        first_name: firstName,
+        second_name: secondName,
         username: username,
         phone: phone,
         email: email,
         password: password,
       });
-      navigate('/labs-bmstu-2023-dia-frontend/');
+      const session_id = Cookies.get('session_id');
+      if (session_id) {
+        const isAdmin = response.data.is_superuser;
+        const username = response.data.username;
+        dispatch(
+          login({
+            isAdmin: isAdmin,
+            username: username,
+          })
+        );
+        localStorage.setItem('isAuth', 'true');
+        localStorage.setItem('isAdmin', isAdmin.toString());
+        localStorage.setItem('username', username);
+        navigate('/');
+      }
     } catch (error) {
-      console.error('Ошибка при регистрации:', error);
-      alert(
-        'Ошибка при регистрации. Не забудьте указать никнейм пользователя и пароль'
+      window.alert(
+        'Ошибка при регистрации. Не забудьте указать никнейм пользователя и пароль.'
       );
+      console.error('Ошибка при регистрации:', error);
     }
   };
 
   return (
     <>
-      <Signup
-        first_name={first_name}
-        second_name={second_name}
+      <RegistrationForm
         username={username}
-        phone={phone}
+        firstName={firstName}
+        secondName={secondName}
         email={email}
         password={password}
-        setFirstName={(first_name) => setFirstName(first_name)}
-        setSecondName={(second_name) => setSecondName(second_name)}
-        setUsername={(username) => setUsername(username)}
-        setPhone={(phone) => setPhone(phone)}
-        setEmail={(email) => setEmail(email)}
-        setPassword={(password) => setPassword(password)}
+        phone={phone}
+        setUsername={setUsername}
+        setFirstName={setFirstName}
+        setSecondName={setSecondName}
+        setEmail={setEmail}
+        setPassword={setPassword}
+        setPhone={setPhone}
         submitHandler={submitHandler}
-      />
+      ></RegistrationForm>
     </>
   );
 };

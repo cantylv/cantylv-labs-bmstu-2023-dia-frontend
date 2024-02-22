@@ -1,17 +1,18 @@
-import {combineReducers, configureStore} from '@reduxjs/toolkit'
-// import requestFilterReducer from './slices/search_slice'
-import authReducer from './slices/auth_slices'
-// import draftReducer from './slices/draft_slices'
-// import phenomFilterReducer from './slices/search_phenom_slice'
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import BidFiltersReducer from './slices/bidFiltersSlice';
+import AuthorizationReducer from './slices/authSlice';
+import DraftReducer from './slices/draftSlice';
+import ServiceFiltersReducer from './slices/serviceFiltersSlice';
 
 export const store = configureStore({
-    reducer: combineReducers({
-        // requestFilter: requestFilterReducer,
-        // phenomFilter: phenomFilterReducer,
-        auth: authReducer,
-        // draft: draftReducer,
-    }),
+  reducer: combineReducers({
+    bidFilter: BidFiltersReducer,  // состояние фильтров на странице списка заявок
+    serviceFilter: ServiceFiltersReducer,  // состояние фильтров на странице списка услуг
+    authState: AuthorizationReducer,  // состояние пользователя (авторизован или нет, модератор или обычный пользователь)
+    draftState: DraftReducer,  // состояние черновика 
+  }),
 });
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
