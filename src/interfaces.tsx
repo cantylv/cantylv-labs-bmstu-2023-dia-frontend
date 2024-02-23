@@ -1,7 +1,7 @@
 export interface Service {
   id: number;
   job: string;
-  img?: string; // нужно посмотреть, что будет, если я отправлю на бек пустое поле с картинкой
+  img: string; // нужно посмотреть, что будет, если я отправлю на бек пустое поле с картинкой
   about: string;
   age: number;
   sex: string;
@@ -51,8 +51,10 @@ export interface getServicesProps {
 export interface deleteServiceFromDraftProps {
   data: {
     serviceId: number;
+    bidId: number;
+    bidServices: Service[];
   };
-  setDraftServices: (services: Service[]) => void;
+  setBidServices: (services: Service[]) => void;
 }
 
 export interface addServiceToDraftProps {
@@ -120,7 +122,6 @@ export interface changeBidStatusProps {
     bidId: number;
   }
   setLoaded: (is_loading: boolean) => void;
-  setBids: (bids: Bid[]) => void;
 }
 
 export interface getBidDetailProps {

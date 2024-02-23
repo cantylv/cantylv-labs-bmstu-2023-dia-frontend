@@ -7,6 +7,7 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom'; // необхо
 //////// страницы
 import ListServicesPage from './pages/ServiceList/index.tsx'; // список услуг
 import ServiceDetailPage from './pages/ServiceDetail/index.tsx'; // страница с услугой (админ сможет редактировать)
+import ServiceDetailEditPage from './pages/ServiceDetailEdit/index.tsx';
 
 import BidListPage from './pages/BidTable/index.tsx'; // список заявок
 import BidDetailPage from './pages/BidDetail/index.tsx'; // страница заявки
@@ -69,7 +70,7 @@ const StartPage: FC = () => {
         {isAdmin && (
           <>
             <Route
-              path="/services/:service_id/edit/" element={<BidDetailPage />}
+              path="/services/:service_id/edit/" element={<ServiceDetailEditPage />}
             />
           </>
         )}

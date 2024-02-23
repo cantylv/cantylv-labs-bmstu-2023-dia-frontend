@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux';
 import {
   useIsAuth,
   useIsAdmin,
-  useIsManager,
   useUsername,
   logout,
 } from '../../store/slices/authSlice';
@@ -18,7 +17,6 @@ function Header() {
   const dispatch = useDispatch();
   const isAuth = useIsAuth();
   const isAdmin = useIsAdmin();
-  const isManager = useIsManager();
   const username = useUsername();
 
   const btnExitHandler = async () => {
@@ -41,10 +39,10 @@ function Header() {
 
         <Nav className="page-links">
           <Nav.Link onClick={() => navigate('/')}>Список услуг</Nav.Link>
-          {isAuth && !(isManager || isAdmin) && (
+          {isAuth && !isAdmin&& (
             <Nav.Link onClick={() => navigate('/bids/')}>Мои заявки</Nav.Link>
           )}
-          {(isManager || isAdmin) && (
+          {isAdmin && (
             <Nav.Link onClick={() => navigate('/bids/')}>Список пользовательских заявок</Nav.Link>
           )}
           {isAdmin && (

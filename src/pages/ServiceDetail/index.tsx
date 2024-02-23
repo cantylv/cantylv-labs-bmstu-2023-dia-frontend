@@ -1,7 +1,6 @@
 // Страница для просмотра услуги
 // Страница доступна всем пользователям
 
-
 import { FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
@@ -9,11 +8,23 @@ import Breadcrumbs, { BreadcrumbLink } from '../../components/breadcrumb';
 import moment from 'moment'; // для преобразования DateTimeField в формат day hh:mm
 import { Service } from '../../interfaces';
 import { useDispatch } from 'react-redux';
-import { addDraft, useServicesId, useDraftId, useDraftServices } from '../../store/slices/draftSlice';
+import {
+  addDraft,
+  useServicesId,
+  useDraftId,
+  useDraftServices,
+} from '../../store/slices/draftSlice';
 import { useIsAdmin, useIsAuth } from '../../store/slices/authSlice';
-import { getOneServiceProps, deleteServiceFromDraftProps, addServiceToDraftProps } from '../../interfaces'
-import { getOneService } from '../../internal/services'
-import { DeleteServiceFromDraft, addServiceToDraft} from '../../internal/services'
+import {
+  getOneServiceProps,
+  deleteServiceFromDraftProps,
+  addServiceToDraftProps,
+} from '../../interfaces';
+import { getOneService } from '../../internal/services';
+import {
+  DeleteServiceFromDraft,
+  addServiceToDraft,
+} from '../../internal/services';
 
 const initialServiceData: Service = {
   id: -1,
@@ -33,22 +44,28 @@ const initialServiceData: Service = {
 const ServiceDetailPage: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isUser = useIsAuth() && !useIsAdmin();  
+  const isUser = useIsAuth() && !useIsAdmin();
 
-  const { serviceId } = useParams();  // serviceId <- строка - значение идентификатора услуги
+  const { serviceId } = useParams(); // serviceId <- строка - значение идентификатора услуги
 
   const [service, setService] = useState<Service>(initialServiceData);
 
-  const [draftServicesId, setDraftServicesId] = useState<number[]>(useServicesId());  // список идентификаторов услуг в черновике (для красивого отображения)
-  const [draftServices, setDraftServices] = useState<Service[]>(useDraftServices()); // список услуг в черновике
+  const [draftServicesId, setDraftServicesId] = useState<number[]>(
+    useServicesId()
+  ); // список идентификаторов услуг в черновике (для красивого отображения)
+  const [draftServices, setDraftServices] = useState<Service[]>(
+    useDraftServices()
+  ); // список услуг в черновике
   const [draftId, setDraftId] = useState(useDraftId()); // идентификатор черновика
 
   const btnDeleteHandler = async () => {
     const propsDelete: deleteServiceFromDraftProps = {
       data: {
         serviceId: Number(serviceId),
+        bidId: draftId,
+        bidServices: draftServices,
       },
-      setDraftServices: setDraftServices,
+      setBidServices: setDraftServices,
     };
     DeleteServiceFromDraft(propsDelete);
   };
@@ -75,9 +92,9 @@ const ServiceDetailPage: FC = () => {
     const propsService: getOneServiceProps = {
       serviceId: Number(serviceId),
       setService: setService,
-    }
+    };
     getOneService(propsService);
-  }, []);   
+  }, []);
 
   useEffect(() => {
     setDraftServicesId(getNumberArrayOfServicesId(draftServices));

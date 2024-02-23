@@ -8,7 +8,11 @@ import {
   addServiceToDraftProps,
   ServiceCardProps,
 } from '../../interfaces';
-import { useServicesId } from '../../store/slices/draftSlice';
+import {
+  useDraftId,
+  useDraftServices,
+  useServicesId,
+} from '../../store/slices/draftSlice';
 import {
   DeleteServiceFromDraft,
   addServiceToDraft,
@@ -26,8 +30,10 @@ const ServiceCard: FC<ServiceCardProps> = (props) => {
     const propsDelete: deleteServiceFromDraftProps = {
       data: {
         serviceId: props.data.id,
+        bidId: useDraftId(),
+        bidServices: useDraftServices(),
       },
-      setDraftServices: props.setDraftServices,
+      setBidServices: props.setDraftServices,
     };
     DeleteServiceFromDraft(propsDelete);
   };

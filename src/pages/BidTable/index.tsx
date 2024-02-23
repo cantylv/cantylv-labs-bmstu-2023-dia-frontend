@@ -1,6 +1,5 @@
-// Страница с таблицой заявок  
+// Страница с таблицой заявок
 // Страница доступна только авторизованному пользователю
-
 
 import Breadcrumbs, {
   BreadcrumbLink,
@@ -24,7 +23,11 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Button, Table, InputGroup } from 'react-bootstrap';
 import { ru } from 'date-fns/locale';
 import { Bid } from '../../interfaces.tsx';
-import { getBidList, changeBidStatus, filterBids } from '../../internal/bids.tsx';
+import {
+  getBidList,
+  changeBidStatus,
+  filterBids,
+} from '../../internal/bids.tsx';
 import {
   getBidListProps,
   changeBidStatusProps,
@@ -174,9 +177,9 @@ const BidListPage = () => {
                                 bidId: bid.id,
                               },
                               setLoaded: setLoaded,
-                              setBids: setBids,
                             };
                             changeBidStatus(propsChangeStatus);
+                            bids[index].status = propsChangeStatus.data.status;
                           }}
                         >
                           Завершить
@@ -191,9 +194,9 @@ const BidListPage = () => {
                                 bidId: bid.id,
                               },
                               setLoaded: setLoaded,
-                              setBids: setBids,
                             };
                             changeBidStatus(propsChangeStatus);
+                            bids[index].status = propsChangeStatus.data.status;
                           }}
                         >
                           Отклонить
@@ -217,9 +220,9 @@ const BidListPage = () => {
                                 bidId: bid.id,
                               },
                               setLoaded: setLoaded,
-                              setBids: setBids,
                             };
                             changeBidStatus(propsChangeStatus);
+                            bids[index].status = propsChangeStatus.data.status;
                           }}
                         >
                           Cформировать
@@ -234,9 +237,9 @@ const BidListPage = () => {
                                 bidId: bid.id,
                               },
                               setLoaded: setLoaded,
-                              setBids: setBids,
                             };
                             changeBidStatus(propsChangeStatus);
+                            bids[index].status = propsChangeStatus.data.status;
                           }}
                         >
                           Удалить

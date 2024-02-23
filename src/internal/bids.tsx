@@ -4,6 +4,7 @@ import {
   changeBidStatusProps,
   filterBidsProps,
   getBidDetailProps,
+  deleteServiceFromDraftProps,
 } from '../interfaces';
 
 export const getBid = async (props: getBidDetailProps) => {
@@ -35,11 +36,6 @@ export const changeBidStatus = async (props: changeBidStatusProps) => {
     await axios.put(
       `/api/v1/bids/${props.data.bidId}/new_status/?status=${props.data.status}`
     );
-    const bidListProps: getBidListProps = {
-      setLoaded: props.setLoaded,
-      setBids: props.setBids,
-    };
-    getBidList(bidListProps);
   } catch (error) {
     console.log('Ошибка в изменении статуса заявки', error);
   }
@@ -80,4 +76,16 @@ export const filterBids = async (props: filterBidsProps) => {
     console.log('Возникла ошибка при фильтрации заявок.');
   }
   props.setLoaded(false);
+};
+
+
+export const deleteServiceFromBid = (props: deleteServiceFromDraftProps) => async () => {
+  try {
+    const response = await axios.delete(
+      `/api/v1/delete_service/${props.data.serviceId}/bids/${props.data.bidId}/`
+    );
+    props.setBidServices(response.data.services);
+  } catch (error) {
+    console.log('Ошибка в получении заявки', error);
+  }
 };
