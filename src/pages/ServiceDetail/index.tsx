@@ -62,8 +62,6 @@ const ServiceDetailPage: FC = () => {
     const propsDelete: deleteServiceFromDraftProps = {
       data: {
         serviceId: Number(serviceId),
-        bidId: draftId,
-        bidServices: draftServices,
       },
       setBidServices: setDraftServices,
     };
@@ -108,7 +106,7 @@ const ServiceDetailPage: FC = () => {
   }, [draftServices]);
 
   const breadcrumbsLinks: BreadcrumbLink[] = [
-    { label: 'Список услуг', url: '/' },
+    { label: 'Виды деятельности', url: '/' },
     { label: service.job || '', url: `/services/${serviceId}/` },
   ];
 
@@ -118,7 +116,7 @@ const ServiceDetailPage: FC = () => {
 
   return (
     <div className="container">
-      <Button className="btn-home btn" onClick={handleButtonBackClick}>
+      <Button className="btn-home" onClick={handleButtonBackClick}>
         Hазад
       </Button>
 

@@ -38,14 +38,14 @@ export const getServices = async (props: getServicesProps) => {
   }
 };
 
-// Получение услуги 
+// Получение услуги
 export const getOneService = async (props: getOneServiceProps) => {
   try {
     const response = await axios.get(`/api/v1/services/${props.serviceId}/`);
     props.setService(response.data);
   } catch (error) {
     if (typeof props.serviceId === 'string') {
-      props.setService(mock_services[Number(props.serviceId) - 1]);
+      props.setService(mock_services[0]);
     } else {
       console.error('Идентификатор не определен', error);
     }
@@ -56,7 +56,7 @@ export const getOneService = async (props: getOneServiceProps) => {
 export const DeleteServiceFromDraft = async (
   props: deleteServiceFromDraftProps
 ) => {
-  let isAuth = Boolean(localStorage.getItem('isAuth'));
+  let isAuth = useIsAuth();
   if (!isAuth) {
     window.alert('Для удаления услуги из заявки необходимо авторизоваться');
     return;
@@ -72,7 +72,7 @@ export const DeleteServiceFromDraft = async (
     const response = await axios.delete(
       `/api/v1/delete_service/${props.data.serviceId}/bids/${draftId}/`
     );
-    props.setDraftServices(response.data.services);
+    props.setBidServices(response.data.services);
   } catch (error) {
     console.error('Ошибка удаления услуги из черновика', error);
   }

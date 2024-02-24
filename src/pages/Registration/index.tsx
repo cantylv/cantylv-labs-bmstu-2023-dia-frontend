@@ -1,6 +1,5 @@
-// Страница для регистрации 
-// Страница доступна только неавторизованному пользователю 
-
+// Страница для регистрации
+// Страница доступна только неавторизованному пользователю
 
 import { FC, useState } from 'react';
 import axios from 'axios';
@@ -44,8 +43,8 @@ const RegistrationPage: FC = () => {
         localStorage.setItem('isAuth', 'true');
         localStorage.setItem('isAdmin', isAdmin.toString());
         localStorage.setItem('username', username);
-        navigate('/');
       }
+      navigate('/');
     } catch (error) {
       window.alert(
         'Ошибка при регистрации. Не забудьте указать никнейм пользователя и пароль.'

@@ -1,14 +1,14 @@
-// Страница с формой для авторизации пользователя 
-// Страница доступна только анонимному пользователю 
-
+// Страница с формой для авторизации пользователя
+// Страница доступна только анонимному пользователю
 
 import { FC, useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
-import { Form } from 'react-bootstrap';
+import { Button, Container, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../store/slices/authSlice';
+import { Row, Col } from 'react-bootstrap';
 
 const LoginPage: FC = () => {
   const [username, setUsername] = useState('');
@@ -46,26 +46,48 @@ const LoginPage: FC = () => {
 
   return (
     <>
-      <Form className="loginForm">
+      <Container className="loginForm">
         <h1 className="titleLogin">Авторизация</h1>
-        <input
-          type="text"
-          onChange={(event) => setUsername(event.target.value)}
-          placeholder="Почта"
-          value={username}
-          className="FormField"
-        />
-        <input
-          type="password"
-          onChange={(event) => setPassword(event.target.value)}
-          placeholder="Пароль"
-          value={password}
-          className="FormField"
-        />
-        <button className="btnLogin" type="button" onClick={submitHandler}>
-          Войти
-        </button>
-      </Form>
+        <div className='loginFormBlock'>
+          <Form.Group
+            as={Row}
+            className="mb-3 g"
+            controlId="formPlaintextUsername"
+          >
+            <Form.Label column>
+              Никнейм
+            </Form.Label>
+            <Col>
+              <Form.Control
+                type="text"
+                placeholder="nagibator2003"
+                className='loginFormInput'
+                onChange={(event) => setUsername(event.target.value)}
+              />
+            </Col>
+          </Form.Group>
+
+          <Form.Group
+            as={Row}
+            className="mb-3"
+            controlId="formPlaintextPassword"
+          >
+            <Form.Label column className='me-4'>
+              Пароль
+            </Form.Label>
+            <Col>
+              <Form.Control
+                type="password"
+                className='loginFormInput'
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </Col>
+          </Form.Group>
+          <Button className="btnLogin" type="button" onClick={submitHandler}>
+            Войти
+          </Button>
+        </div>
+      </Container>
     </>
   );
 };

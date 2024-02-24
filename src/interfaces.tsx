@@ -51,8 +51,6 @@ export interface getServicesProps {
 export interface deleteServiceFromDraftProps {
   data: {
     serviceId: number;
-    bidId: number;
-    bidServices: Service[];
   };
   setBidServices: (services: Service[]) => void;
 }

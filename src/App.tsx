@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { useDispatch } from 'react-redux'; // принимает action, вызывает reducer, reducer меняет состояние store
 import { useEffect, useState } from 'react'; // хуки, которые отвечают за состояние функционального компонента
 import { Routes, Route, BrowserRouter } from 'react-router-dom'; // необходимо для навигации между страницами
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 //////// страницы
 import ListServicesPage from './pages/ServiceList/index.tsx'; // список услуг
@@ -16,7 +17,7 @@ import RegistrationPage from './pages/Registration'; // форма с регис
 import LoginPage from './pages/Login'; // форма логина
 
 //////// элементы страницы
-import Header from './components/index/element.tsx';
+import Header from './components/header/element.tsx';
 import Footer from './components/footer/index.tsx';
 
 /////// действия стора
@@ -26,15 +27,13 @@ import './App.css';
 
 const StartPage: FC = () => {
   const dispatch = useDispatch();
-  const [isAuth, setIsAuth] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const isAuth = localStorage.getItem('isAuth') === 'true';
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
   useEffect(() => {
-    const auth = Boolean(localStorage.getItem('isAuth')); // Boolean(null) == false
-    setIsAuth(auth);
-
-    const admin = Boolean(localStorage.getItem('isAdmin'));
-    setIsAdmin(admin);
+    const isAuth = localStorage.getItem('isAuth') === 'true'; // Boolean(null) == false
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    
 
     let username = localStorage.getItem('username');
     username = !username ? '' : username;
@@ -54,23 +53,21 @@ const StartPage: FC = () => {
       <Header />
       <Routes>
         <Route path="/" element={<ListServicesPage />} />
-        <Route path="/services/:service_id/" element={<ServiceDetailPage />} />
-        {!isAuth && (
-          <>
-            <Route path="/login/" element={<LoginPage />} />
-            <Route path="/reg/" element={<RegistrationPage />} />
-          </>
-        )}
+        <Route path="/services/:serviceId/" element={<ServiceDetailPage />} />
+        <Route path="/login/" element={<LoginPage />} />
+        <Route path="/reg/" element={<RegistrationPage />} />
+
         {isAuth && (
           <>
             <Route path="/bids/" element={<BidListPage />} />
-            <Route path="/bids/:bid_id/" element={<BidDetailPage />} />
+            <Route path="/bids/:bidId/" element={<BidDetailPage />} />
           </>
         )}
         {isAdmin && (
           <>
             <Route
-              path="/services/:service_id/edit/" element={<ServiceDetailEditPage />}
+              path="/services/:serviceId/edit/"
+              element={<ServiceDetailEditPage />}
             />
           </>
         )}

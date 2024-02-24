@@ -9,18 +9,17 @@ import {
   ServiceCardProps,
 } from '../../interfaces';
 import {
-  useDraftId,
-  useDraftServices,
-  useServicesId,
-} from '../../store/slices/draftSlice';
-import {
   DeleteServiceFromDraft,
   addServiceToDraft,
 } from '../../internal/services';
+import { useIsAuth, useIsAdmin } from '../../store/slices/authSlice';
 
 const ServiceCard: FC<ServiceCardProps> = (props) => {
   const navigate = useNavigate();
-  const [servicesIdDraft] = useState<number[]>(useServicesId()); // список id услуг в черновике
+  const [servicesIdDraft] = useState<number[]>([]); // список id услуг в черновике
+  const isAuth = useIsAuth();
+  const isAdmin = useIsAdmin();
+  const isUser = isAuth && !isAdmin;
 
   const handleButtonInfoClick = () => {
     navigate(`/services/${props.data.id}/`);
@@ -30,8 +29,6 @@ const ServiceCard: FC<ServiceCardProps> = (props) => {
     const propsDelete: deleteServiceFromDraftProps = {
       data: {
         serviceId: props.data.id,
-        bidId: useDraftId(),
-        bidServices: useDraftServices(),
       },
       setBidServices: props.setDraftServices,
     };
@@ -65,7 +62,7 @@ const ServiceCard: FC<ServiceCardProps> = (props) => {
         <div className="card-service-about-title">{props.data.job}</div>
 
         <div className="card-service-short-info-age card-title">
-          Необходимый возраст:
+          Необходимый возраст
         </div>
         <div className="card-service-short-info-age-ans card-title-ans">
           {props.data.age}+
@@ -95,22 +92,22 @@ const ServiceCard: FC<ServiceCardProps> = (props) => {
 
       <div className="btns">
         <Button
-          className="card-service-btn-info btn"
+          className="card-service-btn-info"
           onClick={handleButtonInfoClick}
         >
           Подробнее
         </Button>
-        {servicesIdDraft.includes(props.data.id) && (
+        {isUser && servicesIdDraft.includes(props.data.id) && (
           <Button
-            className="card-service-btn-delete btn"
+            className="card-service-btn-delete"
             onClick={btnDeleteHandler}
           >
             Удалить из заявки
           </Button>
         )}
-        {!servicesIdDraft.includes(props.data.id) && (
+        {isUser && !servicesIdDraft.includes(props.data.id) && (
           <Button
-            className="card-service-btn-delete btn"
+            className="card-service-btn-delete"
             onClick={btnAddHandler}
           >
             Добавить в заявку

@@ -10,14 +10,12 @@ import ru from 'date-fns/locale/ru';
 
 registerLocale('ru', ru);
 
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+
 // use.* - использовать значение состояния из Store
 // change.* - изменить значение состояния
 import {
-  useSearchText,
-  useDateStart,
-  useDateEnd,
-  useSalaryStart,
-  useSalaryEnd,
   changeSearchText,
   changeDateStart,
   changeDateEnd,
@@ -31,13 +29,13 @@ import { filterServices } from '../../internal/services';
 const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
   const dispatch = useDispatch();
 
-  const [searchText, setSearchText] = useState(useSearchText());
-  const [dateStart, setDateStart] = useState(new Date(useDateStart()));
-  const [dateEnd, setDateEnd] = useState(new Date(useDateEnd()));
-  const [salaryStart, setSalaryStart] = useState(useSalaryStart());
-  const [salaryEnd, setSalaryEnd] = useState(useSalaryEnd());
+  const [searchText, setSearchText] = useState('');
+  const [dateStart, setDateStart] = useState<Date>(new Date());
+  const [dateEnd, setDateEnd] = useState<Date>(new Date());
+  const [salaryStart, setSalaryStart] = useState<number>(0);
+  const [salaryEnd, setSalaryEnd] = useState<number>(1000);
 
-  const ButtonFilterhHandler = () => {
+  const ButtonFilterHandler = () => {
     const filterProps: filterServicesProps = {
       data: {
         searchText: searchText,
@@ -75,61 +73,66 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
 
   return (
     <div className="filterMenu">
-      <form id="filterForm">
-        <input
-          id="filter_input"
+      <InputGroup className="searchTextInput">
+        <Form.Control
+          type="text"
+          placeholder="Название"
           value={searchText}
           name="search"
-          type="text"
-          placeholder="Поиск..."
           onChange={(event) => setSearchText(event.target.value)}
         />
+
         <Button
           className="btn-search btn"
           type="button"
-          onClick={ButtonFilterhHandler}
+          onClick={ButtonFilterHandler}
         >
           Найти
         </Button>
-      </form>
-      <div className="filterTime">
-        <span className="textDateStart">Начало работы с</span>
+      </InputGroup>
+
+      <InputGroup className="searchTextInput">
+        <InputGroup.Text className="textDateStart">
+          Начало работы с
+        </InputGroup.Text>
         <DatePicker
           locale="ru"
           className="datepicker"
           selected={dateStart}
           onChange={(date) => date && setDateStart(date)}
         />
-        <span className="textDateEnd">По</span>
+        <InputGroup.Text className="textDateEnd">По</InputGroup.Text>
         <DatePicker
           locale="ru"
           className="datepicker"
           selected={new Date(dateEnd)}
           onChange={(date) => date && setDateEnd(date)} // нужно добавить проверку на falsy значение
         />
-        <Button type="button" onClick={ButtonFilterhHandler}>
+        <Button type="button" onClick={ButtonFilterHandler}>
           Найти
         </Button>
-      </div>
-      <div className="filterSalary">
-        <span className="textDateStart">З/п от</span>
-        <input
-          className="salaryBlock"
+      </InputGroup>
+
+      <InputGroup className="salaryInput">
+        <InputGroup.Text className="textDateEnd">З/п от</InputGroup.Text>
+
+        <Form.Control
           type="number"
           value={salaryStart}
+          className='salary'
           onChange={(event) => setSalaryStart(Number(event.target.value))}
         />
-        <span className="textDateEnd">и до</span>
-        <input
-          className="salaryBlock"
+        <InputGroup.Text className="textDateEnd">и до</InputGroup.Text>
+        <Form.Control
           type="number"
-          value={salaryStart}
+          value={salaryEnd}
+          className='salary'
           onChange={(event) => setSalaryEnd(Number(event.target.value))}
         />
-        <Button type="button" onClick={ButtonFilterhHandler}>
+        <Button type="button" onClick={ButtonFilterHandler}>
           Найти
         </Button>
-      </div>
+      </InputGroup>
     </div>
   );
 };
