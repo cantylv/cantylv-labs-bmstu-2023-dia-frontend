@@ -42,10 +42,18 @@ export interface Bid {
 export interface getServicesProps {
   data: {
     getParameters: string;
+    draftId: number;
   };
   setServices: (services: Service[]) => void;
   setDraftId: (draftId: number) => void;
   setDraftServices: (services: Service[]) => void;
+}
+
+export interface getBidsProps {
+  data: {
+    getParameters: string;
+  };
+  setBids: (services: Bid[]) => void;
 }
 
 export interface deleteServiceFromDraftProps {
@@ -76,6 +84,7 @@ export interface filterServicesProps {
     dateEnd: string;
     salaryStart: number;
     salaryEnd: number;
+    draftId: number;
   };
   setServices: (services: Service[]) => void;
   setDraftId: (draftId: number) => void;
@@ -86,6 +95,11 @@ export interface ServiceFilterMenuProps {
   setServices: (services: Service[]) => void;
   setDraftId: (draftId: number) => void;
   setDraftServices: (services: Service[]) => void;
+}
+
+export interface BidFilterMenuProps {
+  setBids: (bids: Bid[]) => void;
+  setLoaded: (is_loading: boolean) => void;
 }
 
 export interface getOneServiceProps {
@@ -134,8 +148,8 @@ export interface getBidDetailProps {
 export interface filterBidsProps {
   data: {
     status: string;
-    startDate: string;
-    endDate: string;
+    dateStart: string;
+    dateEnd: string;
     username: string;
   };
   setLoaded: (is_loading: boolean) => void;

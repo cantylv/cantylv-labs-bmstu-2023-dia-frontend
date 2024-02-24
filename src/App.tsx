@@ -1,7 +1,7 @@
 //////// библиотека
 import { FC } from 'react';
 import { useDispatch } from 'react-redux'; // принимает action, вызывает reducer, reducer меняет состояние store
-import { useEffect, useState } from 'react'; // хуки, которые отвечают за состояние функционального компонента
+import { useEffect } from 'react'; // хуки, которые отвечают за состояние функционального компонента
 import { Routes, Route, BrowserRouter } from 'react-router-dom'; // необходимо для навигации между страницами
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -33,7 +33,6 @@ const StartPage: FC = () => {
   useEffect(() => {
     const isAuth = localStorage.getItem('isAuth') === 'true'; // Boolean(null) == false
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
-    
 
     let username = localStorage.getItem('username');
     username = !username ? '' : username;
@@ -54,6 +53,7 @@ const StartPage: FC = () => {
       <Routes>
         <Route path="/" element={<ListServicesPage />} />
         <Route path="/services/:serviceId/" element={<ServiceDetailPage />} />
+        
         <Route path="/login/" element={<LoginPage />} />
         <Route path="/reg/" element={<RegistrationPage />} />
 

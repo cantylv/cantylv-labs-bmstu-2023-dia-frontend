@@ -7,7 +7,7 @@ interface LoadAnimationProps {
 }
 
 const LoadAnimation: FC<LoadAnimationProps> = ({ children, loaded }) => {
-    return loaded ? (
+    return !loaded ? (
         <>{children}</>
     ) : (
         <div className='position-absolute top-50 start-50 translate-middled-flex justify-content-center'>

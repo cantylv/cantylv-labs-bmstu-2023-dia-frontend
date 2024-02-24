@@ -23,10 +23,12 @@ export const getServices = async (props: getServicesProps) => {
     }
     props.setServices(responseServices.data.services);
     if (responseServices.data?.draft_id) {
-      const draftId = useDraftId();
-      if (!draftId) {
+      if (!props.data.draftId) {
+        console.log('afsfas')
         props.setDraftId(responseServices.data.draft_id);
       }
+      console.log(props.data.draftId);
+      const draftId: number = responseServices.data.draft_id;
       const responseDraft = await axios.get(`/api/v1/bids/${draftId}/`);
       props.setDraftServices(responseDraft.data.services); // список услуг с полями в заявке
     }
@@ -135,6 +137,7 @@ export const filterServices = async (props: filterServicesProps) => {
   const propsGetServices: getServicesProps = {
     data: {
       getParameters: queryString,
+      draftId: props.data.draftId,
     },
     setServices: props.setServices,
     setDraftId: props.setDraftId,

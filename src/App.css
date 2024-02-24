@@ -280,6 +280,7 @@ label {
   flex-direction: row;
   justify-content: start;
   align-items: baseline;
+  margin-bottom: 30px;
 }
 
 .breadCrumbLabel {
@@ -415,4 +416,33 @@ li {
 
 .salaryInput {
   width: 400px;
+}
+
+
+.usernameInput {
+  width: 525px;
+}
+
+.statusInput {
+  width: 1050px
+}
+
+.dateInput {
+  display: flex;
+  justify-content: center;
+}
+
+.bidfilterMenu {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+
+.btnBids {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  row-gap: 10px;
+  column-gap: 10px;
 }

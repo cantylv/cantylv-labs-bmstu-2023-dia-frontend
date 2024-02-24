@@ -44,6 +44,7 @@ const ListServicesPage: FC = () => {
     const props: getServicesProps = {
       data: {
         getParameters: '',
+        draftId: draftId,
       },
       setServices: setServices,
       setDraftId: setDraftId,
