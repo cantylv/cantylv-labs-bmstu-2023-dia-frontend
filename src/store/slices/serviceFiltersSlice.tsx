@@ -15,19 +15,19 @@ const serviceFiltersSlice = createSlice({
   initialState: initialState,
   reducers: {
     changeSearchText(state, action) {
-      state.searchText = action.payload.searchText;
+      state.searchText = action.payload;
     },
     changeDateStart(state, action) {
-      state.dateStart = action.payload.dateStart;
+      state.dateStart = action.payload;
     },
     changeDateEnd(state, action) {
-      state.dateEnd = action.payload.dateEnd;
+      state.dateEnd = action.payload;
     },
     changeSalaryStart(state, action) {
-      state.salaryStart = action.payload.salaryStart;
+      state.salaryStart = action.payload;
     },
     changeSalaryEnd(state, action) {
-      state.salaryEnd = action.payload.salaryEnd;
+      state.salaryEnd = action.payload;
     },
     clearFilters(state) {
       state.searchText = '';
