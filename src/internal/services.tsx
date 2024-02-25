@@ -86,11 +86,8 @@ export const deleteServiceFromDraft = async (
     const response = await axios.delete(
       `/api/v1/delete_service/${props.serviceId}/bids/${props.draftId}/`
     );
-    console.log(response)
     dispatch(updateDraftServices(response.data.services));
-    console.log(response.data);
     const arrayServiceId = getNumberArrayOfServicesId(response.data.services);
-    console.log(arrayServiceId);
     dispatch(updateServicesId(arrayServiceId));
     dispatch(updateCountServices(arrayServiceId.length));
   } catch (error) {

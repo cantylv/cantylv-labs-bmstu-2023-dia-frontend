@@ -31,7 +31,7 @@ const StartPage: FC = () => {
     localStorage.getItem('isAdmin') === 'true'
   );
 
-  // при перезагрузке страницы состояние store обнуляется 
+  // при перезагрузке страницы состояние store обнуляется
   useEffect(() => {
     const auth = localStorage.getItem('isAuth') === 'true';
     const admin = localStorage.getItem('isAdmin') === 'true';

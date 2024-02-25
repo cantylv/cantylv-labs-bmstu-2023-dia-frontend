@@ -128,6 +128,7 @@ export interface getBidDetailProps {
   setLoaded: (is_loading: boolean) => void;
   setBidServices: (services: Service[]) => void;
   setBid: (bids: Bid) => void;
+  setBidStatus: (status: string) => void;
 }
 
 export interface filterBidsProps {

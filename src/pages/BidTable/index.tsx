@@ -18,12 +18,14 @@ import { getBidList, changeBidStatus } from '../../internal/bids.tsx';
 import { getBidListProps, changeBidStatusProps } from '../../interfaces.tsx';
 import Container from 'react-bootstrap/Container';
 import BidFilterMenu from '../../components/bidFilter/index.tsx';
+import { useCountServices } from '../../store/slices/draftSlice.tsx';
 
 const BidListPage = () => {
   const [bids, setBids] = useState<Bid[]>([]);
   const isAdmin = useIsAdmin();
   const isAuth = useIsAuth();
   const isUser = isAuth && !isAdmin;
+  const countServices = useCountServices();
 
   const [loaded, setLoaded] = useState<boolean>(false); // загрузка
   const navigate = useNavigate();
@@ -44,7 +46,7 @@ const BidListPage = () => {
   const returnRightStringDate = (dateString: string | null) => {
     if (dateString) {
       const date = new Date(dateString);
-      return moment(date).format('MM/DD/YYYY')
+      return moment(date).format('MM/DD/YYYY');
     } else {
       return '';
     }
@@ -65,9 +67,7 @@ const BidListPage = () => {
       { label: 'Cписок пользовательских заявок', url: '/bids/' },
     ];
   } else if (isUser) {
-    breadcrumbsLinks = [
-      { label: 'Мои заявки', url: '/bids/' },
-    ];
+    breadcrumbsLinks = [{ label: 'Мои заявки', url: '/bids/' }];
   }
   // добавить профиль пользоватля через navigate и никнейм
 
@@ -87,165 +87,200 @@ const BidListPage = () => {
               <th className="text-center">Дата создания</th>
               <th className="text-center">Дата формирования</th>
               <th className="text-center">Дата завершения</th>
-              <th>Действия</th>
+              <th className="text-center">Действия</th>
             </tr>
           </thead>
           <tbody>
             {bids.map((bid, index) => (
-              <tr key={bid.id} className="table-row">
-                <td
-                  className="text-center bidNumber"
-                  onClick={() => navigate(`/bids/${bid.id}/`)}
-                >
-                  {++index}
-                </td>
-                <td className="text-center">
-                  {returnRussianBidStatus(bid.status)}
-                </td>
-                {isAdmin && (
-                  <td className="text-center">{bid.user.username}</td>
-                )}
-                <td className="text-center">
-                  {returnRightStringDate(bid.date_create)}
-                </td>
-                <td className="text-center">
-                  {returnRightStringDate(bid.date_formation)}
-                </td>
-                <td className="text-center">{returnRightStringDate(bid.date_finish)}</td>
-                {isAdmin && (
-                  <>
-                    {bid.status === 'formed' ? (
-                      <td className="btnBids p-0 mt-2">
-                        <Button
-                          size="sm"
-                          className="btn-success"
-                          onClick={() => {
-                            const propsChangeStatus: changeBidStatusProps = {
-                              data: {
-                                status: 'completed',
-                                bidId: bid.id,
-                              },
-                              setLoaded: setLoaded,
-                            };
-                            changeBidStatus(propsChangeStatus);
-                            bids[index].status = propsChangeStatus.data.status;
-                          }}
-                        >
-                          Завершить
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="btn-success"
-                          onClick={() => {
-                            const propsChangeStatus: changeBidStatusProps = {
-                              data: {
-                                status: 'rejected',
-                                bidId: bid.id,
-                              },
-                              setLoaded: setLoaded,
-                            };
-                            changeBidStatus(propsChangeStatus);
-                            bids[index].status = propsChangeStatus.data.status;
-                          }}
-                        >
-                          Отклонить
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="btn-success"
-                          onClick={() => {
-                            navigate(`/bids/${bid.id}`);
-                          }}
-                        >
-                          Подробнее
-                        </Button>
-                      </td>
-                    ) : (
-                      <td className="btnBids p-0 mt-2">
-                        <Button
-                          size="sm"
-                          className="btn-success"
-                          onClick={() => {
-                            navigate(`/bids/${bid.id}`);
-                          }}
-                        >
-                          Подробнее
-                        </Button>
-                      </td>
-                    )}
-                  </>
-                )}
+              <>
+                {!(bid.status === 'draft' && !countServices) && (
+                  <tr key={bid.id} className="table-row">
+                    <td
+                      className="text-center bidNumber"
+                      onClick={() => {
+                        navigate(`/bids/${bid.id}/`);
+                      }}
+                    >
+                      {++index}
+                    </td>
+                    <td className="text-center">
+                      {returnRussianBidStatus(bid.status)}
+                    </td>
 
-                {isUser && (
-                  <div>
-                    {bid.status === 'draft' ? (
-                      <td className="btnBids p-0">
-                        <Button
-                          size="sm"
-                          className="btn-success"
-                          onClick={() => {
-                            const propsChangeStatus: changeBidStatusProps = {
-                              data: {
-                                status: 'formed',
-                                bidId: bid.id,
-                              },
-                              setLoaded: setLoaded,
-                            };
-                            changeBidStatus(propsChangeStatus);
-                            bids[index].status = propsChangeStatus.data.status;
-                          }}
-                        >
-                          Cформировать
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="btn-success"
-                          onClick={() => {
-                            const propsChangeStatus: changeBidStatusProps = {
-                              data: {
-                                status: 'deleted',
-                                bidId: bid.id,
-                              },
-                              setLoaded: setLoaded,
-                            };
-                            changeBidStatus(propsChangeStatus);
-                            bids[index].status = propsChangeStatus.data.status;
-                          }}
-                        >
-                          Удалить
-                        </Button>
-                        <td>
-                          <Button
-                            size="sm"
-                            className="btn-success"
-                            onClick={() => {
-                              navigate(`/bids/${bid.id}`);
-                            }}
-                          >
-                            Подробнее
-                          </Button>
-                        </td>
-                      </td>
-                    ) : (
-                      <td className="btnBids p-0 mt-2">
-                        <Button
-                          size="sm"
-                          className="btn-success"
-                          onClick={() => {
-                            navigate(`/bids/${bid.id}`);
-                          }}
-                        >
-                          Подробнее
-                        </Button>
-                      </td>
+                    {isAdmin && (
+                      <td className="text-center">{bid.user.username}</td>
                     )}
-                  </div>
+
+                    <td className="text-center">
+                      {returnRightStringDate(bid.date_create)}
+                    </td>
+                    <td className="text-center">
+                      {returnRightStringDate(bid.date_formation)}
+                    </td>
+                    <td className="text-center">
+                      {returnRightStringDate(bid.date_finish)}
+                    </td>
+                    {isAdmin && (
+                      <>
+                        {bid.status === 'formed' ? (
+                          <td className="btnBids p-2">
+                            <Button
+                              size="sm"
+                              className="btn-success"
+                              onClick={() => {
+                                const propsChangeStatus: changeBidStatusProps =
+                                  {
+                                    data: {
+                                      status: 'completed',
+                                      bidId: bid.id,
+                                    },
+                                    setLoaded: setLoaded,
+                                  };
+                                changeBidStatus(propsChangeStatus).then(() => {
+                                  const propsBidList: getBidListProps = {
+                                    setLoaded: setLoaded,
+                                    setBids: setBids,
+                                  };
+                                  getBidList(propsBidList);
+                                });
+                              }}
+                            >
+                              Завершить
+                            </Button>
+                            <Button
+                              size="sm"
+                              className="btn-success"
+                              onClick={() => {
+                                const propsChangeStatus: changeBidStatusProps =
+                                  {
+                                    data: {
+                                      status: 'rejected',
+                                      bidId: bid.id,
+                                    },
+                                    setLoaded: setLoaded,
+                                  };
+                                changeBidStatus(propsChangeStatus).then(() => {
+                                  const propsBidList: getBidListProps = {
+                                    setLoaded: setLoaded,
+                                    setBids: setBids,
+                                  };
+                                  getBidList(propsBidList);
+                                });
+                              }}
+                            >
+                              Отклонить
+                            </Button>
+                            <Button
+                              size="sm"
+                              className="btn-success"
+                              onClick={() => {
+                                navigate(`/bids/${bid.id}/`);
+                              }}
+                            >
+                              Подробнее
+                            </Button>
+                          </td>
+                        ) : (
+                          <td className="btnBids p-2">
+                            <Button
+                              size="sm"
+                              className="btn-success"
+                              onClick={() => {
+                                navigate(`/bids/${bid.id}/`);
+                              }}
+                            >
+                              Подробнее
+                            </Button>
+                          </td>
+                        )}
+                      </>
+                    )}
+
+                    {isUser && (
+                      <>
+                        {bid.status === 'draft' ? (
+                          <td className="btnBids p-2">
+                            <Button
+                              size="sm"
+                              className="btn-success"
+                              onClick={() => {
+                                const propsChangeStatus: changeBidStatusProps =
+                                  {
+                                    data: {
+                                      status: 'formed',
+                                      bidId: bid.id,
+                                    },
+                                    setLoaded: setLoaded,
+                                  };
+                                changeBidStatus(propsChangeStatus).then(() => {
+                                  const propsBidList: getBidListProps = {
+                                    setLoaded: setLoaded,
+                                    setBids: setBids,
+                                  };
+                                  getBidList(propsBidList);
+                                });
+                              }}
+                            >
+                              Cформировать
+                            </Button>
+                            <Button
+                              size="sm"
+                              className="btn-success"
+                              onClick={() => {
+                                const propsChangeStatus: changeBidStatusProps =
+                                  {
+                                    data: {
+                                      status: 'deleted',
+                                      bidId: bid.id,
+                                    },
+                                    setLoaded: setLoaded,
+                                  };
+                                changeBidStatus(propsChangeStatus);
+
+                                changeBidStatus(propsChangeStatus).then(() => {
+                                  const propsBidList: getBidListProps = {
+                                    setLoaded: setLoaded,
+                                    setBids: setBids,
+                                  };
+                                  getBidList(propsBidList);
+                                });
+                              }}
+                            >
+                              Удалить
+                            </Button>
+
+                            <Button
+                              size="sm"
+                              className="btn-success"
+                              onClick={() => {
+                                navigate(`/bids/${bid.id}/`);
+                              }}
+                            >
+                              Подробнее
+                            </Button>
+                          </td>
+                        ) : (
+                          <td className="btnBids p-2">
+                            <Button
+                              size="sm"
+                              className="btn-success"
+                              onClick={() => {
+                                navigate(`/bids/${bid.id}/`);
+                              }}
+                            >
+                              Подробнее
+                            </Button>
+                          </td>
+                        )}
+                      </>
+                    )}
+                  </tr>
                 )}
-              </tr>
+              </>
             ))}
             {!bids.length && (
               <tr>
-                <td colSpan={7} className="emptyTableLabel">
+                <td colSpan={7} className="emptyTableLabel text-center">
                   Пользовательских заявок нет
                 </td>
               </tr>

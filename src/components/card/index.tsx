@@ -34,7 +34,7 @@ const ServiceCard: FC<ServiceCardProps> = (props) => {
       serviceId: props.data.id,
       draftId: draftId,
     };
-    console.log(propsDelete);
+
     deleteServiceFromDraft(propsDelete, dispatch);
   };
 
@@ -42,12 +42,18 @@ const ServiceCard: FC<ServiceCardProps> = (props) => {
     const propsAdd: addServiceToDraftProps = {
       serviceId: props.data.id,
     };
-    console.log(propsAdd)
+
     addServiceToDraft(propsAdd, dispatch);
   };
 
   return (
-    <div className={`card-service ${isUser && servicesIdDraft && servicesIdDraft.includes(props.data.id) ? 'inDraft': ''}`}>
+    <div
+      className={`card-service ${
+        isUser && servicesIdDraft && servicesIdDraft.includes(props.data.id)
+          ? 'inDraft'
+          : ''
+      }`}
+    >
       <div className="card-service-img">
         {
           <img

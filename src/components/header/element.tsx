@@ -16,10 +16,7 @@ import profile from '../../assets/profile.png';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import trash from '../../assets/trash.png';
-import {
-  useDraftId,
-  useCountServices,
-} from '../../store/slices/draftSlice';
+import { useDraftId, useCountServices } from '../../store/slices/draftSlice';
 
 function Header() {
   const navigate = useNavigate();
@@ -32,10 +29,6 @@ function Header() {
 
   const draftId = useDraftId();
   const countServices = useCountServices();
-
-  const btnDraftHandle = () => {
-    navigate(`/api/v1/bids/${draftId}/`);
-  };
 
   const btnExitHandler = () => {
     try {
@@ -106,10 +99,10 @@ function Header() {
                   <Image
                     src={trash}
                     className="imgTrash"
-                    onClick={btnDraftHandle}
+                    onClick={() => navigate(`/bids/${draftId}/`)}
                   />
                   <Badge bg="danger" className="badgeTrash">
-                    {countServices}
+                    {countServices ? countServices: ''}
                   </Badge>
                 </span>
               </>

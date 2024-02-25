@@ -12,6 +12,7 @@ export const getBid = async (props: getBidDetailProps) => {
     const response = await axios.get(`/api/v1/bids/${props.data.bidId}/`);
     props.setBid(response.data);
     props.setBidServices(response.data.services);
+    props.setBidStatus(response.data.status);
   } catch (error) {
     console.log('Ошибка получения заявки', error);
   }
@@ -46,13 +47,13 @@ export const filterBids = async (props: filterBidsProps) => {
   let queryString: string = '';
   let params: URLSearchParams = new URLSearchParams();
 
-  const username: string = props.data.username;
-  const dateStart: string = props.data.dateStart;
-  const dateEnd: string = props.data.dateEnd;
-  const bidStatus: string = props.data.status;
+  const username: string | undefined = props.data.username;
+  const dateStart: string | undefined = props.data.dateStart;
+  const dateEnd: string | undefined = props.data.dateEnd;
+  const bidStatus: string | undefined = props.data.status;
 
   // Добавляем параметр поиска, если текст поиска не пустой
-  if (username.trim() !== '') {
+  if (username && username.trim() !== '') {
     params.append('username', username.trim());
   }
   // Добавляем параметры даты, если они установлены
