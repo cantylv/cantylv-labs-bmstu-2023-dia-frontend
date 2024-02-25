@@ -132,10 +132,10 @@ export interface getBidDetailProps {
 
 export interface filterBidsProps {
   data: {
-    status: string;
-    dateStart: string;
-    dateEnd: string;
-    username: string;
+    status: string | undefined;
+    dateStart: string | undefined;
+    dateEnd: string | undefined;
+    username: string | undefined;
   };
   setLoaded: (is_loading: boolean) => void;
   setBids: (bids: Bid[]) => void;

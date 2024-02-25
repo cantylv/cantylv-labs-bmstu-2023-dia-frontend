@@ -8,11 +8,8 @@ import Breadcrumbs, { BreadcrumbLink } from '../../components/breadcrumb';
 import moment from 'moment'; // для преобразования DateTimeField в формат day hh:mm
 import { Service } from '../../interfaces';
 import { useDispatch } from 'react-redux';
-import {
-  useServicesId,
-  useDraftId,
-} from '../../store/slices/draftSlice';
-import { useIsAdmin, useIsAuth } from '../../store/slices/authSlice';
+import { useServicesId, useDraftId } from '../../store/slices/draftSlice';
+import { useIsUser } from '../../store/slices/authSlice';
 import {
   getOneServiceProps,
   deleteServiceFromDraftProps,
@@ -42,7 +39,8 @@ const initialServiceData: Service = {
 const ServiceDetailPage: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isUser = useIsAuth() && !useIsAdmin();
+
+  const isUser = useIsUser();
 
   const { serviceId } = useParams(); // serviceId <- строка - значение идентификатора услуги
 
@@ -89,9 +87,21 @@ const ServiceDetailPage: FC = () => {
         Hазад
       </Button>
 
-      <Breadcrumbs links={breadcrumbsLinks} />
+      <div className='serviceCardMenuNav'>
+        <Breadcrumbs links={breadcrumbsLinks} />
+        {isUser && !draftServicesId.includes(Number(serviceId)) && (
+          <div className="btnAddToDraft">
+            <Button onClick={btnAddHandler}>Добавить в заявку</Button>
+          </div>
+        )}
+        {isUser && draftServicesId.includes(Number(serviceId)) && (
+          <div className="btnAddToDraft">
+            <Button onClick={btnDeleteHandler}>Удалить из заявки</Button>
+          </div>
+        )}
+      </div>
 
-      <div className="card-service-page2">
+      <div className={`card-service-page2 ${isUser && draftServicesId && draftServicesId.includes(Number(serviceId)) ? 'inDraft': ''}`}>
         <div className="card-service-img-page2">
           <img
             src={service.img}
@@ -164,16 +174,6 @@ const ServiceDetailPage: FC = () => {
           </div>
         </div>
       </div>
-      {isUser && draftServicesId.includes(Number(serviceId)) && (
-        <div className="btnAddToDraft">
-          <Button onClick={btnAddHandler}>Добавить в заявку</Button>
-        </div>
-      )}
-      {isUser && !draftServicesId.includes(Number(serviceId)) && (
-        <div className="btnAddToDraft">
-          <Button onClick={btnDeleteHandler}>Удалить из заявки</Button>
-        </div>
-      )}
     </div>
   );
 };

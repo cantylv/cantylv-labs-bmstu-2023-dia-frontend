@@ -4,6 +4,7 @@
 import Breadcrumbs, {
   BreadcrumbLink,
 } from '../../components/breadcrumb/index.tsx';
+import moment from 'moment';
 
 import { useState, useEffect } from 'react';
 import { useIsAdmin, useIsAuth } from '../../store/slices/authSlice.tsx';
@@ -43,11 +44,7 @@ const BidListPage = () => {
   const returnRightStringDate = (dateString: string | null) => {
     if (dateString) {
       const date = new Date(dateString);
-      return date
-        .toISOString()
-        .replace('T', ' ')
-        .replace('Z', '')
-        .substring(0, 16);
+      return moment(date).format('MM/DD/YYYY')
     } else {
       return '';
     }
@@ -61,9 +58,17 @@ const BidListPage = () => {
     getBidList(props);
   }, []);
 
-  const breadcrumbsLinks: BreadcrumbLink[] = [
-    { label: 'Cписок пользовательских заявок', url: '/bids/' },
-  ];
+  let breadcrumbsLinks: BreadcrumbLink[] = [];
+
+  if (isAdmin) {
+    breadcrumbsLinks = [
+      { label: 'Cписок пользовательских заявок', url: '/bids/' },
+    ];
+  } else if (isUser) {
+    breadcrumbsLinks = [
+      { label: 'Мои заявки', url: '/bids/' },
+    ];
+  }
   // добавить профиль пользоватля через navigate и никнейм
 
   return (
@@ -89,7 +94,7 @@ const BidListPage = () => {
             {bids.map((bid, index) => (
               <tr key={bid.id} className="table-row">
                 <td
-                  className="text-center"
+                  className="text-center bidNumber"
                   onClick={() => navigate(`/bids/${bid.id}/`)}
                 >
                   {++index}
