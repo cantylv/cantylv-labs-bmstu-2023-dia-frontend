@@ -1,6 +1,5 @@
-import { FC, useEffect } from 'react';
+import { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 
 // календарь
@@ -17,59 +16,50 @@ import InputGroup from 'react-bootstrap/InputGroup';
 // change.* - изменить значение состояния
 import {
   changeSearchText,
-  changeDateStart,
-  changeDateEnd,
   changeSalaryStart,
   changeSalaryEnd,
+  useSearchText,
+  useSalaryStart,
+  useSalaryEnd,
+  useDateStart,
+  useDateEnd,
+  changeDateStart,
+  changeDateEnd,
 } from '../../store/slices/serviceFiltersSlice';
 
 import { filterServicesProps, ServiceFilterMenuProps } from '../../interfaces';
 import { filterServices } from '../../internal/services';
+import { useDraftId } from '../../store/slices/draftSlice';
 
 const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
   const dispatch = useDispatch();
 
-  const [searchText, setSearchText] = useState('');
-  const [dateStart, setDateStart] = useState<Date>(new Date());
-  const [dateEnd, setDateEnd] = useState<Date>(new Date());
-  const [salaryStart, setSalaryStart] = useState<number>(0);
-  const [salaryEnd, setSalaryEnd] = useState<number>(1000);
+  const searchText = useSearchText();
+  const dateStart = useDateStart();
+  const dateEnd = useDateEnd();
+  const salaryStart = useSalaryStart();
+  const salaryEnd = useSalaryEnd();
+
+  const [dateStartState, setDateStartState] = useState(new Date());
+  const [dateEndState, setDateEndState] = useState(new Date());
+
+  const draftId = useDraftId();
 
   const ButtonFilterHandler = () => {
     const filterProps: filterServicesProps = {
       data: {
         searchText: searchText,
-        dateStart: dateStart.toISOString(),
-        dateEnd: dateEnd.toISOString(),
+        dateStart: dateStart,
+        dateEnd: dateEnd,
         salaryStart: salaryStart,
         salaryEnd: salaryEnd,
+        draftId: draftId,
       },
       setServices: props.setServices,
-      setDraftId: props.setDraftId,
-      setDraftServices: props.setDraftServices,
     };
-    filterServices(filterProps);
+    console.log(filterProps);
+    filterServices(filterProps, dispatch);
   };
-
-  useEffect(() => {
-    dispatch(changeSearchText(searchText));
-  }, [searchText]);
-
-  useEffect(() => {
-    dispatch(changeDateStart(dateStart.toISOString()));
-  }, [dateStart]);
-
-  useEffect(() => {
-    dispatch(changeDateEnd(dateEnd.toISOString()));
-  }, [dateEnd]);
-
-  useEffect(() => {
-    dispatch(changeSalaryStart(salaryStart));
-  }, [salaryStart]);
-
-  useEffect(() => {
-    dispatch(changeSalaryEnd(salaryEnd));
-  }, [salaryEnd]);
 
   return (
     <div className="filterMenu">
@@ -77,9 +67,8 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
         <Form.Control
           type="text"
           placeholder="Название"
-          value={searchText}
           name="search"
-          onChange={(event) => setSearchText(event.target.value)}
+          onChange={(event) => dispatch(changeSearchText(event.target.value))}
         />
 
         <Button
@@ -98,15 +87,25 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
         <DatePicker
           locale="ru"
           className="datepicker"
-          selected={dateStart}
-          onChange={(date) => date && setDateStart(date)}
+          selected={dateStartState}
+          onChange={(date) => {
+            if (date) {
+              setDateStartState(date);
+              dispatch(changeDateStart(date.toISOString()));
+            }
+          }}
         />
         <InputGroup.Text className="textDateEnd">По</InputGroup.Text>
         <DatePicker
           locale="ru"
           className="datepicker"
-          selected={new Date(dateEnd)}
-          onChange={(date) => date && setDateEnd(date)} // нужно добавить проверку на falsy значение
+          selected={dateEndState}
+          onChange={(date) => {
+            if (date) {
+              setDateEndState(date);
+              dispatch(changeDateEnd(date.toISOString()));
+            }
+          }} // нужно добавить проверку на falsy значение
         />
         <Button type="button" onClick={ButtonFilterHandler}>
           Найти
@@ -119,15 +118,19 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
         <Form.Control
           type="number"
           value={salaryStart}
-          className='salary'
-          onChange={(event) => setSalaryStart(Number(event.target.value))}
+          className="salary"
+          onChange={(event) =>
+            dispatch(changeSalaryStart(Number(event.target.value)))
+          }
         />
         <InputGroup.Text className="textDateEnd">и до</InputGroup.Text>
         <Form.Control
           type="number"
           value={salaryEnd}
-          className='salary'
-          onChange={(event) => setSalaryEnd(Number(event.target.value))}
+          className="salary"
+          onChange={(event) =>
+            dispatch(changeSalaryEnd(Number(event.target.value)))
+          }
         />
         <Button type="button" onClick={ButtonFilterHandler}>
           Найти

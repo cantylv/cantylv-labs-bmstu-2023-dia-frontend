@@ -13,6 +13,7 @@ import Breadcrumbs, { BreadcrumbLink } from '../../components/breadcrumb';
 import {
   addDraft,
   useDraftId,
+  useDraftServices,
   useServicesId,
 } from '../../store/slices/draftSlice';
 
@@ -25,36 +26,21 @@ const ListServicesPage: FC = () => {
 
   const [services, setServices] = useState<Service[]>([]); // список услуг, отображаемых на странице
 
-  const [draftId, setDraftId] = useState(useDraftId()); // идентификатор черновика
-  // список идентификаторов услуг в черновике (для красивого отображения услуг, находящихся в черновике)
-  const [draftServicesId, setDraftServicesId] = useState<number[]>(
-    useServicesId()
-  );
-  const [draftServices, setDraftServices] = // список услуг в черновике (с полями)
-    useState<Service[]>([]);
-
-  const getNumberArrayOfServicesId = (serviceArray: Service[]) => {
-    if (!serviceArray.length) {
-      return [];
-    }
-    return serviceArray.map((service) => service.id);
-  };
+  const draftId = useDraftId();
+  const draftServicesId = useServicesId();
+  const draftServices = useDraftServices();
 
   useEffect(() => {
     const props: getServicesProps = {
       data: {
         getParameters: '',
-        draftId: draftId,
       },
       setServices: setServices,
-      setDraftId: setDraftId,
-      setDraftServices: setDraftServices,
     };
-    getServices(props);
+    getServices(props, dispatch);
   }, []);
 
   useEffect(() => {
-    setDraftServicesId(getNumberArrayOfServicesId(draftServices));
     dispatch(
       addDraft({
         draftId: draftId,
@@ -78,22 +64,13 @@ const ListServicesPage: FC = () => {
         работай спокойно вместе с сервисом для внештатного персонала ПодJOBка!
       </div>
 
-      <ServiceFilterMenu
-        setServices={setServices}
-        setDraftServices={setDraftServices}
-        setDraftId={setDraftId}
-      />
+      <ServiceFilterMenu setServices={setServices} />
 
       <Breadcrumbs links={breadcrumbsLinks} />
 
       <div className="services">
         {services.map((item, index) => (
-          <ServiceCard
-            key={index}
-            data={item}
-            setDraftServices={setDraftServices} // поменять кол-во услуг в черновике
-            setDraftId={setDraftId}
-          />
+          <ServiceCard key={index} data={item} />
         ))}
       </div>
     </div>

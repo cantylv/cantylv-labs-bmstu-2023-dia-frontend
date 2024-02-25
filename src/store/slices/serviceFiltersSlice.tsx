@@ -1,18 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-
-const initialState = {
-  searchText: '',
-  dateStart: '',
-  dateEnd: '',
-  salaryStart: 0,
-  salaryEnd: 0,
-};
+import { initialStateServiceFilterData } from '../../initialData';
 
 const serviceFiltersSlice = createSlice({
   name: 'serviceFilter',
-  initialState: initialState,
+  initialState: initialStateServiceFilterData,
   reducers: {
     changeSearchText(state, action) {
       state.searchText = action.payload;

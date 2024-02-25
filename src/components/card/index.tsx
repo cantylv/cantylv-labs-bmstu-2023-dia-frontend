@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import moment from 'moment';
@@ -13,10 +13,16 @@ import {
   addServiceToDraft,
 } from '../../internal/services';
 import { useIsAuth, useIsAdmin } from '../../store/slices/authSlice';
+import { useDraftId, useServicesId } from '../../store/slices/draftSlice';
+import { useDispatch } from 'react-redux';
 
 const ServiceCard: FC<ServiceCardProps> = (props) => {
   const navigate = useNavigate();
-  const [servicesIdDraft] = useState<number[]>([]); // список id услуг в черновике
+  const dispatch = useDispatch();
+
+  const servicesIdDraft = useServicesId();
+  const draftId = useDraftId();
+
   const isAuth = useIsAuth();
   const isAdmin = useIsAdmin();
   const isUser = isAuth && !isAdmin;
@@ -27,21 +33,15 @@ const ServiceCard: FC<ServiceCardProps> = (props) => {
 
   const btnDeleteHandler = async () => {
     const propsDelete: deleteServiceFromDraftProps = {
-      data: {
-        serviceId: props.data.id,
-      },
-      setBidServices: props.setDraftServices,
+      serviceId: props.data.id,
+      draftId: draftId,
     };
-    DeleteServiceFromDraft(propsDelete);
+    DeleteServiceFromDraft(propsDelete, dispatch);
   };
 
   const btnAddHandler = async () => {
     const propsAdd: addServiceToDraftProps = {
-      data: {
-        serviceId: props.data.id,
-      },
-      setDraftServices: props.setDraftServices,
-      setDraftId: props.setDraftId,
+      serviceId: props.data.id,
     };
     addServiceToDraft(propsAdd);
   };
@@ -106,10 +106,7 @@ const ServiceCard: FC<ServiceCardProps> = (props) => {
           </Button>
         )}
         {isUser && !servicesIdDraft.includes(props.data.id) && (
-          <Button
-            className="card-service-btn-delete"
-            onClick={btnAddHandler}
-          >
+          <Button className="card-service-btn-delete" onClick={btnAddHandler}>
             Добавить в заявку
           </Button>
         )}

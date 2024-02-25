@@ -77,12 +77,12 @@ export const getOneService = async (props: getOneServiceProps) => {
 
 // Удаление услуги из черновика пользователя
 export const DeleteServiceFromDraft = async (
-  props: deleteServiceFromDraftProps
+  props: deleteServiceFromDraftProps,
+  dispatch: Dispatch<any>
 ) => {
-  const dispatch = useDispatch();
   try {
     const response = await axios.delete(
-      `/api/v1/delete_service/${props.data.serviceId}/bids/${props.data.draftId}/`
+      `/api/v1/delete_service/${props.serviceId}/bids/${props.draftId}/`
     );
     dispatch(updateDraftServices(response.data.services));
 
@@ -112,8 +112,6 @@ export const addServiceToDraft = async (props: addServiceToDraftProps) => {
     console.error('Error ', error);
   }
 };
-
-
 
 // Фильтрация услуг
 export const filterServices = async (
@@ -153,7 +151,6 @@ export const filterServices = async (
   const propsGetServices: getServicesProps = {
     data: {
       getParameters: queryString,
-      draftId: props.data.draftId,
     },
     setServices: props.setServices,
   };

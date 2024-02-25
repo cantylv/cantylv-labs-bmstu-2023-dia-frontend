@@ -1,14 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import { initialStateAuthData } from '../../initialData';
 
 const userAuthSlice = createSlice({
   name: 'auth',
-  initialState: {
-    isAuth: false,
-    isAdmin: false,
-    username: '',
-  },
+  initialState: initialStateAuthData,
   reducers: {
     login: (state, action) => {
       state.isAuth = true;

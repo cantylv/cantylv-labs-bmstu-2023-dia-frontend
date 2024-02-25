@@ -1,17 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import { useSelector } from 'react-redux';
-
-const initialState = {
-  status: '',
-  dateStart: '',
-  dateEnd: '',
-  username: '',
-};
+import { initialStateBidFilterData } from '../../initialData';
 
 const bidFiltersSlice = createSlice({
   name: 'bidFilter',
-  initialState,
+  initialState: initialStateBidFilterData,
   reducers: {
     setBidFilterData(state, action) {
       state.status = action.payload.status;

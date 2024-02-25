@@ -9,12 +9,10 @@ import Breadcrumbs, { BreadcrumbLink } from '../../components/breadcrumb';
 import { Service, Bid, getBidDetailProps } from '../../interfaces';
 import { bidInitialData } from '../../initialData';
 import {
-  deleteServiceFromDraftProps,
   changeBidStatusProps,
 } from '../../interfaces';
 import {
   getBid,
-  deleteServiceFromBid,
   changeBidStatus,
 } from '../../internal/bids';
 import LoadAnimation from '../../components/LoadAnimation';
@@ -42,15 +40,14 @@ const BidPage = () => {
   }, []);
 
   const btnDeleteHadler = (service_id: number) => {
-    const props: deleteServiceFromDraftProps = {
-      data: {
-        serviceId: service_id,
-        bidId: Number(bid_id),
-        bidServices: bidServices,
-      },
-      setBidServices: setBidServices,
-    };
-    deleteServiceFromBid(props);
+    // const props: deleteServiceFromDraftProps = {
+    //   data: {
+    //     serviceId: service_id,
+    //     draftId: Number(bid_id),
+    //   },
+    //   setBidServices: setBidServices,
+    // };
+    return service_id;
   };
 
   const btnServiceFormedHadler = () => {

@@ -42,11 +42,8 @@ export interface Bid {
 export interface getServicesProps {
   data: {
     getParameters: string;
-    draftId: number;
   };
   setServices: (services: Service[]) => void;
-  setDraftId: (draftId: number) => void;
-  setDraftServices: (services: Service[]) => void;
 }
 
 export interface getBidsProps {
@@ -57,24 +54,16 @@ export interface getBidsProps {
 }
 
 export interface deleteServiceFromDraftProps {
-  data: {
-    serviceId: number;
-  };
-  setBidServices: (services: Service[]) => void;
+  serviceId: number;
+  draftId: number;
 }
 
 export interface addServiceToDraftProps {
-  data: {
-    serviceId: number;
-  };
-  setDraftServices: (services: Service[]) => void;
-  setDraftId: (draftId: number) => void;
+  serviceId: number;
 }
 
 export interface ServiceCardProps {
   data: Service;
-  setDraftServices: (services: Service[]) => void;
-  setDraftId: (draftId: number) => void;
 }
 
 export interface filterServicesProps {
@@ -87,14 +76,10 @@ export interface filterServicesProps {
     draftId: number;
   };
   setServices: (services: Service[]) => void;
-  setDraftId: (draftId: number) => void;
-  setDraftServices: (services: Service[]) => void;
 }
 
 export interface ServiceFilterMenuProps {
   setServices: (services: Service[]) => void;
-  setDraftId: (draftId: number) => void;
-  setDraftServices: (services: Service[]) => void;
 }
 
 export interface BidFilterMenuProps {
@@ -132,14 +117,14 @@ export interface changeBidStatusProps {
   data: {
     status: string;
     bidId: number;
-  }
+  };
   setLoaded: (is_loading: boolean) => void;
 }
 
 export interface getBidDetailProps {
   data: {
     bidId: number;
-  }
+  };
   setLoaded: (is_loading: boolean) => void;
   setBidServices: (services: Service[]) => void;
   setBid: (bids: Bid) => void;
@@ -154,4 +139,31 @@ export interface filterBidsProps {
   };
   setLoaded: (is_loading: boolean) => void;
   setBids: (bids: Bid[]) => void;
+}
+
+export interface initialStateDraft {
+  draftId: number;
+  services: Service[];
+  servicesId: number[];
+}
+
+export interface initialStateServiceFilter {
+  searchText: string;
+  dateStart: string;
+  dateEnd: string;
+  salaryStart: number;
+  salaryEnd: number;
+}
+
+export interface initialStateBidFilter {
+  status: string;
+  dateStart: string;
+  dateEnd: string;
+  username: string;
+}
+
+export interface initialStateAuth {
+  isAuth: boolean;
+  isAdmin: boolean;
+  username: string;
 }

@@ -1,4 +1,11 @@
-import { Bid, Service } from './interfaces';
+import {
+  Bid,
+  Service,
+  initialStateDraft,
+  initialStateServiceFilter,
+  initialStateBidFilter,
+  initialStateAuth,
+} from './interfaces';
 
 export const bidInitialData: Bid = {
   id: 0,
@@ -42,4 +49,31 @@ export const serviceInitialData: Service = {
   salary: 0,
   date_start: '',
   date_end: '',
+};
+
+export const initialStateDraftData: initialStateDraft = {
+  draftId: 0,
+  services: [],
+  servicesId: [],
+};
+
+export const initialStateServiceFilterData: initialStateServiceFilter = {
+  searchText: '',
+  dateStart: '',
+  dateEnd: '',
+  salaryStart: 0,
+  salaryEnd: 0,
+};
+
+export const initialStateBidFilterData: initialStateBidFilter = {
+  status: '',
+  dateStart: '',
+  dateEnd: '',
+  username: '',
+};
+
+export const initialStateAuthData: initialStateAuth = {
+  isAuth: false,
+  isAdmin: false,
+  username: '',
 };
