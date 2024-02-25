@@ -68,12 +68,12 @@ export interface ServiceCardProps {
 
 export interface filterServicesProps {
   data: {
-    searchText: string;
-    dateStart: string;
-    dateEnd: string;
-    salaryStart: number;
-    salaryEnd: number;
-    draftId: number;
+    searchText: string | undefined;
+    dateStart: string | undefined;
+    dateEnd: string | undefined;
+    salaryStart: number | undefined;
+    salaryEnd: number | undefined;
+    draftId: number | undefined;
   };
   setServices: (services: Service[]) => void;
 }
@@ -164,6 +164,7 @@ export interface initialStateBidFilter {
 
 export interface initialStateAuth {
   isAuth: boolean;
+  isUser: boolean;
   isAdmin: boolean;
   username: string;
 }

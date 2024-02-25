@@ -4,24 +4,31 @@ import Logo from '../../assets/icons/logo.svg';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../store/slices/authSlice';
+import {
+  logout,
+  useIsAdmin,
+  useIsAuth,
+  useIsUser,
+  useUsername
+} from '../../store/slices/authSlice';
 import axios from 'axios';
 import profile from '../../assets/profile.png';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import trash from '../../assets/trash.png';
-import { useEffect, useState } from 'react';
+import { useDraftId, useServicesId } from '../../store/slices/draftSlice';
 
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const isAuth = localStorage.getItem('isAuth') === 'true';
-  const isAdmin = localStorage.getItem('isAdmin') === 'true';
-  const username = localStorage.getItem('username');
+  const isAuth = useIsAuth();
+  const isAdmin = useIsAdmin();
+  const isUser = useIsUser();
+  const username = useUsername();
 
-  const [draftId, setDraftId] = useState(0);
-  const [countDraftServices, setCountDraftServices] = useState(0); // кол-во услуг в черновике (чтобы отображать в корзине кол-во заявок)
+  const draftId = useDraftId();
+  const servicesIdDraft = useServicesId();
 
   const btnDraftHandle = () => {
     navigate(`/api/v1/bids/${draftId}/`);
@@ -31,39 +38,38 @@ function Header() {
     try {
       axios.post(`/api/v1/logout/`);
       dispatch(logout());
-      localStorage.clear();
       navigate('/');
     } catch (error) {
       console.error('Ошибка при деавторизации:', error);
     }
   };
 
-  useEffect(() => {
-    setDraftId(0);
-    setCountDraftServices(10);
-  }, [dispatch]);
-
   return (
     <Navbar expand="lg" className="container" data-bs-theme="light">
       <div className="menu">
         <Navbar.Brand>
-          <img src={Logo} alt="Логотип сервиса" onClick={() => navigate('/')} />
+          <img
+            src={Logo}
+            alt="Логотип сервиса"
+            className="logo"
+            onClick={() => navigate('/')}
+          />
         </Navbar.Brand>
 
         <Nav className="page-links">
           <Nav.Link onClick={() => navigate('/')}>Виды деятельности</Nav.Link>
-          {isAuth && !isAdmin && (
+          {isUser && (
             <Nav.Link onClick={() => navigate('/bids/')}>Мои заявки</Nav.Link>
           )}
           {isAdmin && (
-            <Nav.Link onClick={() => navigate('/bids/')}>
-              Список пользовательских заявок
-            </Nav.Link>
-          )}
-          {isAdmin && (
-            <Nav.Link onClick={() => navigate('/services/edit/')}>
-              Редактирование видов деятельности
-            </Nav.Link>
+            <>
+              <Nav.Link onClick={() => navigate('/bids/')}>
+                Список пользовательских заявок
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate('/services/edit/')}>
+                Редактирование видов деятельности
+              </Nav.Link>
+            </>
           )}
         </Nav>
       </div>
@@ -90,16 +96,16 @@ function Header() {
       {isAuth && (
         <div className="block-auth">
           <div className="profileBlock">
-            {!isAdmin && (
+            {isUser && (
               <>
                 <span className="trashBlock">
                   <Image
                     src={trash}
-                    className="btnTrashDisable me-3"
+                    className="imgTrash"
                     onClick={btnDraftHandle}
                   />
                   <Badge bg="danger" className="badgeTrash">
-                    {countDraftServices}
+                    {servicesIdDraft}
                   </Badge>
                 </span>
               </>

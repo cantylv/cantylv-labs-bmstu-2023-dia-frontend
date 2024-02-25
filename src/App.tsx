@@ -1,7 +1,5 @@
 //////// библиотека
 import { FC } from 'react';
-import { useDispatch } from 'react-redux'; // принимает action, вызывает reducer, reducer меняет состояние store
-import { useEffect } from 'react'; // хуки, которые отвечают за состояние функционального компонента
 import { Routes, Route, BrowserRouter } from 'react-router-dom'; // необходимо для навигации между страницами
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -21,28 +19,13 @@ import Header from './components/header/element.tsx';
 import Footer from './components/footer/index.tsx';
 
 /////// действия стора
-import { login, useIsAdmin, useIsAuth } from './store/slices/authSlice.tsx'; // авторизованность пользователя и его права
+import { useIsAdmin, useIsAuth } from './store/slices/authSlice.tsx'; // авторизованность пользователя и его права
 
 import './App.css';
 
 const StartPage: FC = () => {
-  const dispatch = useDispatch();
-  const isAuth = useIsAdmin();
-  const isAdmin = useIsAuth();
-
-  useEffect(() => {
-    let username = localStorage.getItem('username');
-    username = !username ? '' : username;
-
-    if (isAuth) {
-      dispatch(
-        login({
-          isAdmin: isAdmin,
-          username: username,
-        })
-      );
-    }
-  }, [dispatch]); // если пользователь что-то сделает с localStorage, контент поменяется
+  const isAuth = useIsAuth();
+  const isAdmin = useIsAdmin();
 
   return (
     <BrowserRouter>

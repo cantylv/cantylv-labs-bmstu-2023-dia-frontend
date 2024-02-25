@@ -12,7 +12,7 @@ import {
   DeleteServiceFromDraft,
   addServiceToDraft,
 } from '../../internal/services';
-import { useIsAuth, useIsAdmin } from '../../store/slices/authSlice';
+import { useIsUser } from '../../store/slices/authSlice';
 import { useDraftId, useServicesId } from '../../store/slices/draftSlice';
 import { useDispatch } from 'react-redux';
 
@@ -23,9 +23,7 @@ const ServiceCard: FC<ServiceCardProps> = (props) => {
   const servicesIdDraft = useServicesId();
   const draftId = useDraftId();
 
-  const isAuth = useIsAuth();
-  const isAdmin = useIsAdmin();
-  const isUser = isAuth && !isAdmin;
+  const isUser = useIsUser();
 
   const handleButtonInfoClick = () => {
     navigate(`/services/${props.data.id}/`);

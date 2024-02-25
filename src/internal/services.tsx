@@ -122,14 +122,14 @@ export const filterServices = async (
   let queryString: string = '';
   let params: URLSearchParams = new URLSearchParams();
 
-  const searchText: string = props.data.searchText;
-  const dateStart: string = props.data.dateStart;
-  const dateEnd: string = props.data.dateEnd;
-  const salaryStart: number = props.data.salaryStart;
-  const salaryEnd: number = props.data.salaryEnd;
+  const searchText: string | undefined= props.data.searchText;
+  const dateStart: string | undefined = props.data.dateStart;
+  const dateEnd: string | undefined = props.data.dateEnd;
+  const salaryStart: number | undefined = props.data.salaryStart;
+  const salaryEnd: number | undefined= props.data.salaryEnd;
 
   // Добавляем параметр поиска, если текст поиска не пустой
-  if (searchText.trim() !== '') {
+  if (searchText && searchText.trim() !== '') {
     params.append('search', searchText.trim());
   }
 
@@ -149,6 +149,7 @@ export const filterServices = async (
 
   // Получаем queryString для запроса списка услуг
   queryString += params.toString();
+  console.log(queryString)
   const propsGetServices: getServicesProps = {
     data: {
       getParameters: queryString,

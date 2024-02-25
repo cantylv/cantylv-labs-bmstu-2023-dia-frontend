@@ -74,6 +74,7 @@ export const initialStateBidFilterData: initialStateBidFilter = {
 
 export const initialStateAuthData: initialStateAuth = {
   isAuth: false,
+  isUser: false,
   isAdmin: false,
   username: '',
 };

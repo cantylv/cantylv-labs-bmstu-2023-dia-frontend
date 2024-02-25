@@ -19,10 +19,16 @@ a {
   height: autoblock-auth;
 }
 
-.btnTrashDisable {
+.imgTrash {
   width: 50px;
   height: auto;
 }
+
+.trashBlock:hover {
+  cursor: pointer;
+}
+
+
 
 /* УБЕРЕМ СТИЛИ ДЛЯ КНОПКИ menu-nav-bar */
 
@@ -446,3 +452,7 @@ li {
   row-gap: 10px;
   column-gap: 10px;
 }
+
+.logo:hover {
+  cursor: pointer;
+} 

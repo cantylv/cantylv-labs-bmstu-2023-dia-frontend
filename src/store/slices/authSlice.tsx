@@ -10,9 +10,11 @@ const userAuthSlice = createSlice({
     login: (state, action) => {
       state.isAuth = true;
       state.isAdmin = action.payload.isAdmin;
+      state.isUser = action.payload.isUser;
       state.username = action.payload.username;
     },
     logout: (state) => {
+      state.isUser = false;
       state.isAuth = false;
       state.isAdmin = false;
       state.username = '';
@@ -22,6 +24,9 @@ const userAuthSlice = createSlice({
 
 export const useIsAuth = () =>
   useSelector((state: RootState) => state.authState.isAuth);
+
+export const useIsUser = () =>
+  useSelector((state: RootState) => state.authState.isUser);
 
 export const useIsAdmin = () =>
   useSelector((state: RootState) => state.authState.isAdmin);

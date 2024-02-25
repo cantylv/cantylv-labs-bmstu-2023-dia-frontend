@@ -12,21 +12,6 @@ registerLocale('ru', ru);
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-// use.* - использовать значение состояния из Store
-// change.* - изменить значение состояния
-import {
-  changeSearchText,
-  changeSalaryStart,
-  changeSalaryEnd,
-  useSearchText,
-  useSalaryStart,
-  useSalaryEnd,
-  useDateStart,
-  useDateEnd,
-  changeDateStart,
-  changeDateEnd,
-} from '../../store/slices/serviceFiltersSlice';
-
 import { filterServicesProps, ServiceFilterMenuProps } from '../../interfaces';
 import { filterServices } from '../../internal/services';
 import { useDraftId } from '../../store/slices/draftSlice';
@@ -34,14 +19,11 @@ import { useDraftId } from '../../store/slices/draftSlice';
 const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
   const dispatch = useDispatch();
 
-  const searchText = useSearchText();
-  const dateStart = useDateStart();
-  const dateEnd = useDateEnd();
-  const salaryStart = useSalaryStart();
-  const salaryEnd = useSalaryEnd();
-
-  const [dateStartState, setDateStartState] = useState<Date | null>(null);
-  const [dateEndState, setDateEndState] = useState<Date | null>(null);
+  const [searchText, setSearchText] = useState('');
+  const [dateStart, setDateStart] = useState<Date | null>();
+  const [dateEnd, setDateEnd] = useState<Date | null>();
+  const [salaryStart, setSalaryStart] = useState<number>();
+  const [salaryEnd, setSalaryEnd] = useState<number>();
 
   const draftId = useDraftId();
 
@@ -49,8 +31,8 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
     const filterProps: filterServicesProps = {
       data: {
         searchText: searchText,
-        dateStart: dateStart,
-        dateEnd: dateEnd,
+        dateStart: dateStart?.toISOString(),
+        dateEnd: dateEnd?.toISOString(),
         salaryStart: salaryStart,
         salaryEnd: salaryEnd,
         draftId: draftId,
@@ -67,7 +49,7 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
           type="text"
           placeholder="Название"
           name="search"
-          onChange={(event) => dispatch(changeSearchText(event.target.value))}
+          onChange={(event) => setSearchText(event.target.value)}
         />
 
         <Button
@@ -86,25 +68,19 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
         <DatePicker
           locale="ru"
           className="datepicker"
-          selected={dateStartState}
+          selected={dateStart}
           onChange={(date) => {
-            if (date) {
-              setDateStartState(date);
-              dispatch(changeDateStart(date.toISOString()));
-            }
+            setDateStart(date);
           }}
         />
         <InputGroup.Text className="textDateEnd">По</InputGroup.Text>
         <DatePicker
           locale="ru"
           className="datepicker"
-          selected={dateEndState}
+          selected={dateEnd}
           onChange={(date) => {
-            if (date) {
-              setDateEndState(date);
-              dispatch(changeDateEnd(date.toISOString()));
-            }
-          }} // нужно добавить проверку на falsy значение
+            setDateEnd(date);
+          }}
         />
         <Button type="button" onClick={ButtonFilterHandler}>
           Найти
@@ -117,19 +93,13 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
         <Form.Control
           type="number"
           className="salary"
-          value="0"
-          onChange={(event) =>
-            dispatch(changeSalaryStart(Number(event.target.value)))
-          }
+          onChange={(event) => setSalaryStart(Number(event.target.value))}
         />
         <InputGroup.Text className="textDateEnd">и до</InputGroup.Text>
         <Form.Control
           type="number"
           className="salary"
-          value="1000"
-          onChange={(event) =>
-            dispatch(changeSalaryEnd(Number(event.target.value)))
-          }
+          onChange={(event) => setSalaryEnd(Number(event.target.value))}
         />
         <Button type="button" onClick={ButtonFilterHandler}>
           Найти
