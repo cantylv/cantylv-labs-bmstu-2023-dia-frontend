@@ -21,19 +21,16 @@ import Header from './components/header/element.tsx';
 import Footer from './components/footer/index.tsx';
 
 /////// действия стора
-import { login } from './store/slices/authSlice.tsx'; // авторизованность пользователя и его права
+import { login, useIsAdmin, useIsAuth } from './store/slices/authSlice.tsx'; // авторизованность пользователя и его права
 
 import './App.css';
 
 const StartPage: FC = () => {
   const dispatch = useDispatch();
-  const isAuth = localStorage.getItem('isAuth') === 'true';
-  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  const isAuth = useIsAdmin();
+  const isAdmin = useIsAuth();
 
   useEffect(() => {
-    const isAuth = localStorage.getItem('isAuth') === 'true'; // Boolean(null) == false
-    const isAdmin = localStorage.getItem('isAdmin') === 'true';
-
     let username = localStorage.getItem('username');
     username = !username ? '' : username;
 
@@ -45,7 +42,7 @@ const StartPage: FC = () => {
         })
       );
     }
-  }, [dispatch, localStorage]); // если пользователь что-то сделает с localStorage, контент поменяется
+  }, [dispatch]); // если пользователь что-то сделает с localStorage, контент поменяется
 
   return (
     <BrowserRouter>
@@ -53,9 +50,13 @@ const StartPage: FC = () => {
       <Routes>
         <Route path="/" element={<ListServicesPage />} />
         <Route path="/services/:serviceId/" element={<ServiceDetailPage />} />
-        
-        <Route path="/login/" element={<LoginPage />} />
-        <Route path="/reg/" element={<RegistrationPage />} />
+
+        {!isAuth && (
+          <>
+            <Route path="/login/" element={<LoginPage />} />
+            <Route path="/reg/" element={<RegistrationPage />} />
+          </>
+        )}
 
         {isAuth && (
           <>
