@@ -4,9 +4,7 @@ import {
   changeBidStatusProps,
   filterBidsProps,
   getBidDetailProps,
-  deleteServiceFromDraftProps,
 } from '../interfaces';
-import { useDraftId } from '../store/slices/draftSlice';
 
 export const getBid = async (props: getBidDetailProps) => {
   try {
@@ -78,16 +76,3 @@ export const filterBids = async (props: filterBidsProps) => {
   }
   props.setLoaded(false);
 };
-
-export const deleteServiceFromBid =
-  (props: deleteServiceFromDraftProps) => async () => {
-    try {
-      const draftId = useDraftId();
-      const response = await axios.delete(
-        `/api/v1/delete_service/${props.data.serviceId}/bids/${draftId}/`
-      );
-      props.setBidServices(response.data.services);
-    } catch (error) {
-      console.log('Ошибка в получении заявки', error);
-    }
-  };
