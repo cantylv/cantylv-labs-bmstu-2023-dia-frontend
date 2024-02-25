@@ -1,5 +1,5 @@
 //////// библиотека
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom'; // необходимо для навигации между страницами
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -18,14 +18,36 @@ import LoginPage from './pages/Login'; // форма логина
 import Header from './components/header/element.tsx';
 import Footer from './components/footer/index.tsx';
 
-/////// действия стора
-import { useIsAdmin, useIsAuth } from './store/slices/authSlice.tsx'; // авторизованность пользователя и его права
-
 import './App.css';
+import { useDispatch } from 'react-redux';
+import { login } from './store/slices/authSlice.tsx';
 
 const StartPage: FC = () => {
-  const isAuth = useIsAuth();
-  const isAdmin = useIsAdmin();
+  const dispatch = useDispatch();
+  const [isAuth, setIsAuth] = useState<Boolean>(
+    localStorage.getItem('isAuth') === 'true'
+  );
+  const [isAdmin, setIsAdmin] = useState<Boolean>(
+    localStorage.getItem('isAdmin') === 'true'
+  );
+
+  // при перезагрузке страницы состояние store обнуляется 
+  useEffect(() => {
+    const auth = localStorage.getItem('isAuth') === 'true';
+    const admin = localStorage.getItem('isAdmin') === 'true';
+    const username = localStorage.getItem('username');
+
+    setIsAuth(auth);
+    setIsAdmin(admin);
+
+    dispatch(
+      login({
+        isAdmin: admin,
+        isUser: !admin,
+        username: username,
+      })
+    );
+  }, [dispatch, localStorage]);
 
   return (
     <BrowserRouter>

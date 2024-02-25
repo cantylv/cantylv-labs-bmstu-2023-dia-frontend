@@ -10,13 +10,6 @@ import ServiceCard from '../../components/card';
 import ServiceFilterMenu from '../../components/serviceFilter';
 import Breadcrumbs, { BreadcrumbLink } from '../../components/breadcrumb';
 
-import {
-  addDraft,
-  useDraftId,
-  useDraftServices,
-  useServicesId,
-} from '../../store/slices/draftSlice';
-
 // internal функции для работы с состояниями (удалению/добавление услуги в черновик, а также получение списка услуг)
 import { getServices } from '../../internal/services';
 import { Service, getServicesProps } from '../../interfaces';
@@ -25,10 +18,6 @@ const ListServicesPage: FC = () => {
   const dispatch = useDispatch(); // для того, чтобы менять состояние стора
 
   const [services, setServices] = useState<Service[]>([]); // список услуг, отображаемых на странице
-
-  const draftId = useDraftId();
-  const draftServicesId = useServicesId();
-  const draftServices = useDraftServices();
 
   useEffect(() => {
     const props: getServicesProps = {
@@ -39,16 +28,6 @@ const ListServicesPage: FC = () => {
     };
     getServices(props, dispatch);
   }, []);
-
-  useEffect(() => {
-    dispatch(
-      addDraft({
-        draftId: draftId,
-        services: draftServices,
-        servicesId: draftServicesId,
-      })
-    );
-  }, [draftServices]);
 
   const breadcrumbsLinks: BreadcrumbLink[] = [
     { label: 'Виды деятельности', url: '/' },

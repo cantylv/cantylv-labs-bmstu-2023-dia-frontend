@@ -145,6 +145,7 @@ export interface initialStateDraft {
   draftId: number;
   services: Service[];
   servicesId: number[];
+  countServices: number;
 }
 
 export interface initialStateServiceFilter {

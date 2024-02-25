@@ -24,9 +24,9 @@ const LoginPage: FC = () => {
       });
       const session_id = Cookies.get('session_id');
       if (session_id) {
-        const isAdmin = response.data.is_superuser;
-        const isUser = !isAdmin;
-        const username = response.data.username;
+        const isAdmin: Boolean = response.data.is_superuser;
+        const isUser: Boolean = !isAdmin;
+        const username: string = response.data.username;
         dispatch(
           login({
             isAdmin: isAdmin,
@@ -34,6 +34,10 @@ const LoginPage: FC = () => {
             username: username,
           })
         );
+        localStorage.setItem('isAdmin', String(isAdmin));
+        localStorage.setItem('isUser', String(isUser));
+        localStorage.setItem('isAuth', 'true');
+        localStorage.setItem('username', username);
         navigate('/');
       } else {
         window.alert('Ошибка авторизации. Неверный пароль или логин.');

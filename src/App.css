@@ -28,7 +28,9 @@ a {
   cursor: pointer;
 }
 
-
+.inDraft {
+  background-color: rgb(184, 248, 193);
+}
 
 /* УБЕРЕМ СТИЛИ ДЛЯ КНОПКИ menu-nav-bar */
 
@@ -424,13 +426,12 @@ li {
   width: 400px;
 }
 
-
 .usernameInput {
   width: 525px;
 }
 
 .statusInput {
-  width: 1050px
+  width: 1050px;
 }
 
 .dateInput {
@@ -455,4 +456,4 @@ li {
 
 .logo:hover {
   cursor: pointer;
-} 
+}

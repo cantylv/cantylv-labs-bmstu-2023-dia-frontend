@@ -9,7 +9,7 @@ import {
   ServiceCardProps,
 } from '../../interfaces';
 import {
-  DeleteServiceFromDraft,
+  deleteServiceFromDraft,
   addServiceToDraft,
 } from '../../internal/services';
 import { useIsUser } from '../../store/slices/authSlice';
@@ -34,18 +34,20 @@ const ServiceCard: FC<ServiceCardProps> = (props) => {
       serviceId: props.data.id,
       draftId: draftId,
     };
-    DeleteServiceFromDraft(propsDelete, dispatch);
+    console.log(propsDelete);
+    deleteServiceFromDraft(propsDelete, dispatch);
   };
 
   const btnAddHandler = async () => {
     const propsAdd: addServiceToDraftProps = {
       serviceId: props.data.id,
     };
-    addServiceToDraft(propsAdd);
+    console.log(propsAdd)
+    addServiceToDraft(propsAdd, dispatch);
   };
 
   return (
-    <div className="card-service">
+    <div className={`card-service ${isUser && servicesIdDraft && servicesIdDraft.includes(props.data.id) ? 'inDraft': ''}`}>
       <div className="card-service-img">
         {
           <img

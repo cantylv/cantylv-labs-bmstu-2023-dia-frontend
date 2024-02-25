@@ -9,14 +9,17 @@ import {
   useIsAdmin,
   useIsAuth,
   useIsUser,
-  useUsername
+  useUsername,
 } from '../../store/slices/authSlice';
 import axios from 'axios';
 import profile from '../../assets/profile.png';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import trash from '../../assets/trash.png';
-import { useDraftId, useServicesId } from '../../store/slices/draftSlice';
+import {
+  useDraftId,
+  useCountServices,
+} from '../../store/slices/draftSlice';
 
 function Header() {
   const navigate = useNavigate();
@@ -28,7 +31,7 @@ function Header() {
   const username = useUsername();
 
   const draftId = useDraftId();
-  const servicesIdDraft = useServicesId();
+  const countServices = useCountServices();
 
   const btnDraftHandle = () => {
     navigate(`/api/v1/bids/${draftId}/`);
@@ -38,6 +41,7 @@ function Header() {
     try {
       axios.post(`/api/v1/logout/`);
       dispatch(logout());
+      localStorage.clear();
       navigate('/');
     } catch (error) {
       console.error('Ошибка при деавторизации:', error);
@@ -105,7 +109,7 @@ function Header() {
                     onClick={btnDraftHandle}
                   />
                   <Badge bg="danger" className="badgeTrash">
-                    {servicesIdDraft}
+                    {countServices}
                   </Badge>
                 </span>
               </>

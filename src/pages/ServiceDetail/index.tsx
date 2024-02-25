@@ -9,10 +9,8 @@ import moment from 'moment'; // для преобразования DateTimeFiel
 import { Service } from '../../interfaces';
 import { useDispatch } from 'react-redux';
 import {
-  addDraft,
   useServicesId,
   useDraftId,
-  useDraftServices,
 } from '../../store/slices/draftSlice';
 import { useIsAdmin, useIsAuth } from '../../store/slices/authSlice';
 import {
@@ -22,7 +20,7 @@ import {
 } from '../../interfaces';
 import { getOneService } from '../../internal/services';
 import {
-  DeleteServiceFromDraft,
+  deleteServiceFromDraft,
   addServiceToDraft,
 } from '../../internal/services';
 
@@ -50,40 +48,22 @@ const ServiceDetailPage: FC = () => {
 
   const [service, setService] = useState<Service>(initialServiceData);
 
-  const [draftServicesId, setDraftServicesId] = useState<number[]>(
-    useServicesId()
-  ); // список идентификаторов услуг в черновике (для красивого отображения)
-  const [draftServices, setDraftServices] = useState<Service[]>(
-    useDraftServices()
-  ); // список услуг в черновике
-  const [draftId, setDraftId] = useState(useDraftId()); // идентификатор черновика
+  const draftServicesId = useServicesId();
+  const draftId = useDraftId(); // идентификатор черновика
 
   const btnDeleteHandler = async () => {
     const propsDelete: deleteServiceFromDraftProps = {
-      data: {
-        serviceId: Number(serviceId),
-      },
-      setBidServices: setDraftServices,
+      serviceId: Number(serviceId),
+      draftId: draftId,
     };
-    DeleteServiceFromDraft(propsDelete);
+    deleteServiceFromDraft(propsDelete, dispatch);
   };
 
   const btnAddHandler = async () => {
     const propsAdd: addServiceToDraftProps = {
-      data: {
-        serviceId: Number(serviceId),
-      },
-      setDraftServices: setDraftServices,
-      setDraftId: setDraftId,
+      serviceId: Number(serviceId),
     };
-    addServiceToDraft(propsAdd);
-  };
-
-  const getNumberArrayOfServicesId = (serviceArray: Service[]) => {
-    if (!serviceArray.length) {
-      return [];
-    }
-    return serviceArray.map((service) => service.id);
+    addServiceToDraft(propsAdd, dispatch);
   };
 
   useEffect(() => {
@@ -93,17 +73,6 @@ const ServiceDetailPage: FC = () => {
     };
     getOneService(propsService);
   }, []);
-
-  useEffect(() => {
-    setDraftServicesId(getNumberArrayOfServicesId(draftServices));
-    dispatch(
-      addDraft({
-        draftId: draftId,
-        services: draftServices,
-        servicesId: draftServicesId,
-      })
-    );
-  }, [draftServices]);
 
   const breadcrumbsLinks: BreadcrumbLink[] = [
     { label: 'Виды деятельности', url: '/' },

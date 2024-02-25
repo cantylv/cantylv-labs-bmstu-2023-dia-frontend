@@ -11,6 +11,7 @@ const draftSlice = createSlice({
       state.services = action.payload.services;
       state.servicesId = action.payload.servicesId;
       state.draftId = action.payload.draftId;
+      state.countServices = action.payload.countServices;
     },
     updateDraftId(state, action) {
       state.draftId = action.payload;
@@ -21,10 +22,14 @@ const draftSlice = createSlice({
     updateServicesId(state, action) {
       state.servicesId = action.payload;
     },
+    updateCountServices(state, action) {
+      state.countServices = action.payload;
+    },
     clearDraft(state) {
       state.services = [];
       state.servicesId = [];
       state.draftId = 0;
+      state.countServices = 0;
     },
   },
 });
@@ -38,11 +43,15 @@ export const useDraftServices = () =>
 export const useServicesId = () =>
   useSelector((state: RootState) => state.draftState.servicesId);
 
+export const useCountServices = () =>
+  useSelector((state: RootState) => state.draftState.countServices);
+
 export const {
   addDraft,
   clearDraft,
   updateDraftId,
   updateDraftServices,
   updateServicesId,
+  updateCountServices,
 } = draftSlice.actions;
 export default draftSlice.reducer;

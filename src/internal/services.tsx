@@ -7,12 +7,12 @@ import {
   getOneServiceProps,
 } from '../interfaces';
 import {
+  updateCountServices,
   updateDraftId,
   updateDraftServices,
   updateServicesId,
 } from '../store/slices/draftSlice';
 import { mock_services } from '../mockData';
-import { useDispatch } from 'react-redux';
 import { Service } from '../interfaces';
 import { Dispatch } from 'redux';
 
@@ -38,7 +38,7 @@ export const getServices = async (
         `/api/v1/services/?${props.data.getParameters}`
       );
     }
-    console.log(responseServices)
+
     props.setServices(responseServices.data.services);
     // если есть заявка-черновик, она придет в поле draft_id
     if (responseServices.data?.draft_id) {
@@ -46,13 +46,14 @@ export const getServices = async (
       dispatch(updateDraftId(newDraftId));
       // запрос на получение услуг, входящих в черновик
       const responseDraft = await axios.get(`/api/v1/bids/${newDraftId}/`);
-      console.log(responseDraft)
+
       dispatch(updateDraftServices(responseDraft.data.services)); // список услуг с полями в заявке
 
       const arrayServiceId = getNumberArrayOfServicesId(
         responseDraft.data.services
       );
       dispatch(updateServicesId(arrayServiceId)); // список услуг с полями в заявке
+      dispatch(updateCountServices(arrayServiceId.length));
     }
     return 0;
   } catch (error) {
@@ -77,7 +78,7 @@ export const getOneService = async (props: getOneServiceProps) => {
 };
 
 // Удаление услуги из черновика пользователя
-export const DeleteServiceFromDraft = async (
+export const deleteServiceFromDraft = async (
   props: deleteServiceFromDraftProps,
   dispatch: Dispatch<any>
 ) => {
@@ -85,18 +86,23 @@ export const DeleteServiceFromDraft = async (
     const response = await axios.delete(
       `/api/v1/delete_service/${props.serviceId}/bids/${props.draftId}/`
     );
+    console.log(response)
     dispatch(updateDraftServices(response.data.services));
-
+    console.log(response.data);
     const arrayServiceId = getNumberArrayOfServicesId(response.data.services);
+    console.log(arrayServiceId);
     dispatch(updateServicesId(arrayServiceId));
+    dispatch(updateCountServices(arrayServiceId.length));
   } catch (error) {
     console.error('Ошибка удаления услуги из черновика', error);
   }
 };
 
 // Добавление услуги в черновик
-export const addServiceToDraft = async (props: addServiceToDraftProps) => {
-  const dispatch = useDispatch();
+export const addServiceToDraft = async (
+  props: addServiceToDraftProps,
+  dispatch: Dispatch<any>
+) => {
   try {
     // возвращает заявку с услугами
     const response = await axios.post(
@@ -109,8 +115,9 @@ export const addServiceToDraft = async (props: addServiceToDraftProps) => {
 
     const arrayServiceId = getNumberArrayOfServicesId(response.data.services);
     dispatch(updateServicesId(arrayServiceId));
+    dispatch(updateCountServices(arrayServiceId.length));
   } catch (error) {
-    console.error('Error ', error);
+    console.error('Ошибка добавления услуги в черновик ', error);
   }
 };
 
@@ -122,11 +129,11 @@ export const filterServices = async (
   let queryString: string = '';
   let params: URLSearchParams = new URLSearchParams();
 
-  const searchText: string | undefined= props.data.searchText;
+  const searchText: string | undefined = props.data.searchText;
   const dateStart: string | undefined = props.data.dateStart;
   const dateEnd: string | undefined = props.data.dateEnd;
   const salaryStart: number | undefined = props.data.salaryStart;
-  const salaryEnd: number | undefined= props.data.salaryEnd;
+  const salaryEnd: number | undefined = props.data.salaryEnd;
 
   // Добавляем параметр поиска, если текст поиска не пустой
   if (searchText && searchText.trim() !== '') {
@@ -149,7 +156,7 @@ export const filterServices = async (
 
   // Получаем queryString для запроса списка услуг
   queryString += params.toString();
-  console.log(queryString)
+  console.log(queryString);
   const propsGetServices: getServicesProps = {
     data: {
       getParameters: queryString,

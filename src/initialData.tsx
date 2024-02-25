@@ -55,6 +55,7 @@ export const initialStateDraftData: initialStateDraft = {
   services: [],
   servicesId: [],
   draftId: 0,
+  countServices: 0,
 };
 
 export const initialStateServiceFilterData: initialStateServiceFilter = {
