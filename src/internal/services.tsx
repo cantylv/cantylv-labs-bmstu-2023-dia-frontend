@@ -38,14 +38,15 @@ export const getServices = async (
         `/api/v1/services/?${props.data.getParameters}`
       );
     }
+    console.log(responseServices)
     props.setServices(responseServices.data.services);
     // если есть заявка-черновик, она придет в поле draft_id
     if (responseServices.data?.draft_id) {
       const newDraftId = responseServices.data.draft_id;
       dispatch(updateDraftId(newDraftId));
-
       // запрос на получение услуг, входящих в черновик
       const responseDraft = await axios.get(`/api/v1/bids/${newDraftId}/`);
+      console.log(responseDraft)
       dispatch(updateDraftServices(responseDraft.data.services)); // список услуг с полями в заявке
 
       const arrayServiceId = getNumberArrayOfServicesId(

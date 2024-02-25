@@ -51,12 +51,8 @@ const StartPage: FC = () => {
         <Route path="/" element={<ListServicesPage />} />
         <Route path="/services/:serviceId/" element={<ServiceDetailPage />} />
 
-        {!isAuth && (
-          <>
-            <Route path="/login/" element={<LoginPage />} />
-            <Route path="/reg/" element={<RegistrationPage />} />
-          </>
-        )}
+        <Route path="/login/" element={<LoginPage />} />
+        <Route path="/reg/" element={<RegistrationPage />} />
 
         {isAuth && (
           <>

@@ -3,24 +3,23 @@ import { RootState } from '../store';
 import { useSelector } from 'react-redux';
 import { initialStateDraftData } from '../../initialData';
 
-
 const draftSlice = createSlice({
   name: 'draft',
   initialState: initialStateDraftData,
   reducers: {
-    addDraft(state, { payload }) {
-      state.services = payload.services;
-      state.servicesId = payload.countServices;
-      state.draftId = payload.draftId;
+    addDraft(state, action) {
+      state.services = action.payload.services;
+      state.servicesId = action.payload.servicesId;
+      state.draftId = action.payload.draftId;
     },
     updateDraftId(state, action) {
       state.draftId = action.payload;
     },
     updateDraftServices(state, action) {
-      state.draftId = action.payload;
+      state.services = action.payload;
     },
     updateServicesId(state, action) {
-      state.draftId = action.payload;
+      state.servicesId = action.payload;
     },
     clearDraft(state) {
       state.services = [];

@@ -52,9 +52,9 @@ export const serviceInitialData: Service = {
 };
 
 export const initialStateDraftData: initialStateDraft = {
-  draftId: 0,
   services: [],
   servicesId: [],
+  draftId: 0,
 };
 
 export const initialStateServiceFilterData: initialStateServiceFilter = {

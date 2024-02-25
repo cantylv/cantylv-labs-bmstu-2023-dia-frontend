@@ -40,8 +40,8 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
   const salaryStart = useSalaryStart();
   const salaryEnd = useSalaryEnd();
 
-  const [dateStartState, setDateStartState] = useState(new Date());
-  const [dateEndState, setDateEndState] = useState(new Date());
+  const [dateStartState, setDateStartState] = useState<Date | null>(null);
+  const [dateEndState, setDateEndState] = useState<Date | null>(null);
 
   const draftId = useDraftId();
 
@@ -57,7 +57,6 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
       },
       setServices: props.setServices,
     };
-    console.log(filterProps);
     filterServices(filterProps, dispatch);
   };
 
@@ -117,8 +116,8 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
 
         <Form.Control
           type="number"
-          value={salaryStart}
           className="salary"
+          value="0"
           onChange={(event) =>
             dispatch(changeSalaryStart(Number(event.target.value)))
           }
@@ -126,8 +125,8 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
         <InputGroup.Text className="textDateEnd">и до</InputGroup.Text>
         <Form.Control
           type="number"
-          value={salaryEnd}
           className="salary"
+          value="1000"
           onChange={(event) =>
             dispatch(changeSalaryEnd(Number(event.target.value)))
           }

@@ -97,19 +97,23 @@ const ServiceCard: FC<ServiceCardProps> = (props) => {
         >
           Подробнее
         </Button>
-        {isUser && servicesIdDraft.includes(props.data.id) && (
-          <Button
-            className="card-service-btn-delete"
-            onClick={btnDeleteHandler}
-          >
-            Удалить из заявки
-          </Button>
-        )}
-        {isUser && !servicesIdDraft.includes(props.data.id) && (
-          <Button className="card-service-btn-delete" onClick={btnAddHandler}>
-            Добавить в заявку
-          </Button>
-        )}
+        {isUser &&
+          servicesIdDraft &&
+          servicesIdDraft.includes(props.data.id) && (
+            <Button
+              className="card-service-btn-delete"
+              onClick={btnDeleteHandler}
+            >
+              Удалить из заявки
+            </Button>
+          )}
+        {isUser &&
+          servicesIdDraft &&
+          !servicesIdDraft.includes(props.data.id) && (
+            <Button className="card-service-btn-delete" onClick={btnAddHandler}>
+              Добавить в заявку
+            </Button>
+          )}
       </div>
     </div>
   );
