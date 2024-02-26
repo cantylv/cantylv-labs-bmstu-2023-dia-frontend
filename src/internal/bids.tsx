@@ -5,11 +5,21 @@ import {
   filterBidsProps,
   getBidDetailProps,
 } from '../interfaces';
+import { Dispatch } from 'redux';
+import {
+  updateCountServices,
+  updateDraftId,
+  updateDraftServices,
+  updateServicesId,
+} from '../store/slices/draftSlice';
 
-export const getBid = async (props: getBidDetailProps) => {
+export const getBid = async (
+  props: getBidDetailProps
+) => {
   try {
     props.setLoaded(true);
     const response = await axios.get(`/api/v1/bids/${props.data.bidId}/`);
+    console
     props.setBid(response.data);
     props.setBidServices(response.data.services);
     props.setBidStatus(response.data.status);
@@ -30,12 +40,19 @@ export const getBidList = async (props: getBidListProps) => {
   props.setLoaded(false);
 };
 
-export const changeBidStatus = async (props: changeBidStatusProps) => {
+export const changeBidStatus = async (
+  props: changeBidStatusProps,
+  dispatch: Dispatch<any>
+) => {
   try {
     props.setLoaded(true);
     await axios.put(
       `/api/v1/bids/${props.data.bidId}/new_status/?status=${props.data.status}`
     );
+    dispatch(updateDraftId(0));
+    dispatch(updateDraftServices([]));
+    dispatch(updateCountServices(0));
+    dispatch(updateServicesId([]));
   } catch (error) {
     console.log('Ошибка в изменении статуса заявки', error);
   }

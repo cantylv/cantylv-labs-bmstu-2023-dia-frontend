@@ -34,14 +34,17 @@ const RegistrationPage: FC = () => {
       if (session_id) {
         const isAdmin = response.data.is_superuser;
         const username = response.data.username;
+        const isUser = !isAdmin;
         dispatch(
           login({
             isAdmin: isAdmin,
+            isUser: isUser,
             username: username,
           })
         );
         localStorage.setItem('isAuth', 'true');
         localStorage.setItem('isAdmin', isAdmin.toString());
+        localStorage.setItem('isUser', isAdmin.toString());
         localStorage.setItem('username', username);
       }
       navigate('/');

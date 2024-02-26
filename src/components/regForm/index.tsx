@@ -134,7 +134,7 @@ const Signup: FC<SignUpProps> = ({
             </Form.Group>
           </Form>
         </div>
-        <Button className='mt-3 mb-5' onClick={submitHandler}>
+        <Button className='mt-3 mb-3' onClick={submitHandler}>
           Зарегистрироваться
         </Button>
       </Container>

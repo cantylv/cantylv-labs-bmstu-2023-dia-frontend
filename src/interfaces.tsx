@@ -58,6 +58,7 @@ export interface deleteServiceFromDraftProps {
   draftId: number;
 }
 
+
 export interface addServiceToDraftProps {
   serviceId: number;
 }

@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { useIsAdmin, useIsUser } from '../../store/slices/authSlice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Container, Row, Table } from 'react-bootstrap';
 import Breadcrumbs, { BreadcrumbLink } from '../../components/breadcrumb';
 import {
@@ -32,6 +32,8 @@ const BidPage = () => {
 
   const isAdmin = useIsAdmin();
   const isUser = useIsUser();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const props: getBidDetailProps = {
@@ -73,7 +75,18 @@ const BidPage = () => {
       serviceId: serviceId,
       draftId: Number(bidId),
     };
-    deleteServiceFromDraft(propsDelete, dispatch);
+    deleteServiceFromDraft(propsDelete, dispatch).then(() => {
+      const props: getBidDetailProps = {
+        data: {
+          bidId: Number(bidId),
+        },
+        setLoaded: setLoaded,
+        setBidServices: setBidServices,
+        setBid: setBid,
+        setBidStatus: setBidStatus,
+      };
+      getBid(props);
+    });
   };
 
   const btnServiceChangeStatusHadler = (status: string) => {
@@ -84,14 +97,25 @@ const BidPage = () => {
       },
       setLoaded: setLoaded,
     };
-    changeBidStatus(props);
+    changeBidStatus(props, dispatch).then(() => {
+      const propStatus: getBidDetailProps = {
+        data: {
+          bidId: Number(bidId),
+        },
+        setLoaded: setLoaded,
+        setBidServices: setBidServices,
+        setBid: setBid,
+        setBidStatus: setBidStatus,
+      };
+      getBid(propStatus);
+    });
   };
 
   let breadcrumbsLinks: BreadcrumbLink[] = [];
   if (isUser) {
     breadcrumbsLinks = [
       { label: 'Мои заявки', url: '/bids/' },
-      { label: `Заявка №${Number(bidId)}`, url: `/bids/${Number(bidId)}/` },
+      { label: `Заявка`, url: `/bids/${Number(bidId)}/` },
     ];
   }
 
@@ -100,9 +124,9 @@ const BidPage = () => {
       <Breadcrumbs links={breadcrumbsLinks} />
 
       {bid.status === 'draft' ? (
-        <h3 className="title">Черновик</h3>
+        <h3 className="title mb-3">Черновик</h3>
       ) : (
-        <h3 className="mb-2">Данные рассматриваемой заявки</h3>
+        <h3 className="mb-3">Данные рассматриваемой заявки</h3>
       )}
 
       <div className="bid">
@@ -149,7 +173,20 @@ const BidPage = () => {
           </Table>
         </LoadAnimation>
 
-        <h3 className="mb-2 mt-5">Список видов деятельностей</h3>
+      
+        <div className="trashServiceHeader mt-5">
+          <h3 className="mb-2">Список видов деятельностей</h3>
+          {(bidStatus === 'draft' && bidServices.length !== 0) && (
+            <Button
+              className="mb-2 btn-success"
+              onClick={() => {
+                btnServiceChangeStatusHadler('formed');
+              }}
+            >
+              Сформировать
+            </Button>
+          )}
+        </div>
 
         <LoadAnimation loaded={loaded}>
           <Table bordered hover responsive className="servicesTable">
@@ -207,11 +244,11 @@ const BidPage = () => {
                             <Button
                               size="sm"
                               className="btnFormBid mb-2 btn-success"
-                              onClick={() => {
-                                btnServiceChangeStatusHadler('formed');
-                              }}
+                              onClick={() =>
+                                navigate(`/services/${service.id}/`)
+                              }
                             >
-                              Сформировать
+                              Карточка услуги
                             </Button>
                           </Row>
                           <Row>

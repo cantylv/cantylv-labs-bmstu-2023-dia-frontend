@@ -19,8 +19,11 @@ import { getBidListProps, changeBidStatusProps } from '../../interfaces.tsx';
 import Container from 'react-bootstrap/Container';
 import BidFilterMenu from '../../components/bidFilter/index.tsx';
 import { useCountServices } from '../../store/slices/draftSlice.tsx';
+import { useDispatch } from 'react-redux';
+import { Fragment } from 'react';
 
 const BidListPage = () => {
+  const dispatch = useDispatch();
   const [bids, setBids] = useState<Bid[]>([]);
   const isAdmin = useIsAdmin();
   const isAuth = useIsAuth();
@@ -92,9 +95,9 @@ const BidListPage = () => {
           </thead>
           <tbody>
             {bids.map((bid, index) => (
-              <>
+              <Fragment key={bid.id}>
                 {!(bid.status === 'draft' && !countServices) && (
-                  <tr key={bid.id} className="table-row">
+                  <tr className="table-row">
                     <td
                       className="text-center bidNumber"
                       onClick={() => {
@@ -112,13 +115,19 @@ const BidListPage = () => {
                     )}
 
                     <td className="text-center">
-                      {returnRightStringDate(bid.date_create)}
+                      {returnRightStringDate(bid.date_create)
+                        ? returnRightStringDate(bid.date_create)
+                        : '-'}
                     </td>
                     <td className="text-center">
-                      {returnRightStringDate(bid.date_formation)}
+                      {returnRightStringDate(bid.date_formation)
+                        ? returnRightStringDate(bid.date_formation)
+                        : '-'}
                     </td>
                     <td className="text-center">
-                      {returnRightStringDate(bid.date_finish)}
+                      {returnRightStringDate(bid.date_finish)
+                        ? returnRightStringDate(bid.date_finish)
+                        : '-'}
                     </td>
                     {isAdmin && (
                       <>
@@ -136,7 +145,10 @@ const BidListPage = () => {
                                     },
                                     setLoaded: setLoaded,
                                   };
-                                changeBidStatus(propsChangeStatus).then(() => {
+                                changeBidStatus(
+                                  propsChangeStatus,
+                                  dispatch
+                                ).then(() => {
                                   const propsBidList: getBidListProps = {
                                     setLoaded: setLoaded,
                                     setBids: setBids,
@@ -159,7 +171,10 @@ const BidListPage = () => {
                                     },
                                     setLoaded: setLoaded,
                                   };
-                                changeBidStatus(propsChangeStatus).then(() => {
+                                changeBidStatus(
+                                  propsChangeStatus,
+                                  dispatch
+                                ).then(() => {
                                   const propsBidList: getBidListProps = {
                                     setLoaded: setLoaded,
                                     setBids: setBids,
@@ -212,7 +227,10 @@ const BidListPage = () => {
                                     },
                                     setLoaded: setLoaded,
                                   };
-                                changeBidStatus(propsChangeStatus).then(() => {
+                                changeBidStatus(
+                                  propsChangeStatus,
+                                  dispatch
+                                ).then(() => {
                                   const propsBidList: getBidListProps = {
                                     setLoaded: setLoaded,
                                     setBids: setBids,
@@ -235,9 +253,10 @@ const BidListPage = () => {
                                     },
                                     setLoaded: setLoaded,
                                   };
-                                changeBidStatus(propsChangeStatus);
-
-                                changeBidStatus(propsChangeStatus).then(() => {
+                                changeBidStatus(
+                                  propsChangeStatus,
+                                  dispatch
+                                ).then(() => {
                                   const propsBidList: getBidListProps = {
                                     setLoaded: setLoaded,
                                     setBids: setBids,
@@ -276,9 +295,12 @@ const BidListPage = () => {
                     )}
                   </tr>
                 )}
-              </>
+              </Fragment>
             ))}
-            {!bids.length && (
+            {(!bids.length ||
+              (bids.length === 1 &&
+                bids[0].status === 'draft' &&
+                bids[0].services?.length == 0)) && (
               <tr>
                 <td colSpan={7} className="emptyTableLabel text-center">
                   Пользовательских заявок нет
