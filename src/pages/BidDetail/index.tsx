@@ -2,7 +2,7 @@
 // Страница доступна только админу
 
 import { useEffect, useState } from 'react';
-import { useIsAdmin, useIsUser } from '../../store/slices/authSlice';
+import { useIsAdmin, useIsAuth, useIsUser } from '../../store/slices/authSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Container, Row, Table } from 'react-bootstrap';
 import Breadcrumbs, { BreadcrumbLink } from '../../components/breadcrumb';
@@ -31,6 +31,7 @@ const BidPage = () => {
   const { bidId } = useParams();
 
   const isAdmin = useIsAdmin();
+  const isAuth = useIsAuth();
   const isUser = useIsUser();
 
   const navigate = useNavigate();
@@ -124,9 +125,9 @@ const BidPage = () => {
       <Breadcrumbs links={breadcrumbsLinks} />
 
       {bid.status === 'draft' ? (
-        <h3 className="title mb-3">Черновик</h3>
+        <h3 className="title mb-2">Черновик</h3>
       ) : (
-        <h3 className="mb-3">Данные рассматриваемой заявки</h3>
+        <h3 className="mb-2">Данные рассматриваемой заявки</h3>
       )}
 
       <div className="bid">
@@ -146,12 +147,12 @@ const BidPage = () => {
                 <td className="text-center">
                   {returnRussianBidStatus(bidStatus)}
                 </td>
-                <td className="text-center">
-                  {returnRightStringDate(bid.date_create)}
-                </td>
                 {isAdmin && (
                   <td className="text-center">{bid.user.username}</td>
                 )}
+                <td className="text-center">
+                  {returnRightStringDate(bid.date_create)}
+                </td>
 
                 <td className="text-center">
                   {bid.date_formation
@@ -173,10 +174,9 @@ const BidPage = () => {
           </Table>
         </LoadAnimation>
 
-      
         <div className="trashServiceHeader mt-5">
           <h3 className="mb-2">Список видов деятельностей</h3>
-          {(bidStatus === 'draft' && bidServices.length !== 0) && (
+          {bidStatus === 'draft' && bidServices.length !== 0 && (
             <Button
               className="mb-2 btn-success"
               onClick={() => {
@@ -208,7 +208,7 @@ const BidPage = () => {
             </thead>
 
             <tbody>
-              {isUser &&
+              {isAuth &&
                 bidServices.map((service, index) => (
                   <tr key={index}>
                     <td className="text-center align-middle">{service.job}</td>

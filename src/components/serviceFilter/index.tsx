@@ -38,6 +38,7 @@ const ServiceFilterMenu: FC<ServiceFilterMenuProps> = (props) => {
         draftId: draftId,
       },
       setServices: props.setServices,
+      setLoaded: props.setLoaded,
     };
     filterServices(filterProps, dispatch);
   };

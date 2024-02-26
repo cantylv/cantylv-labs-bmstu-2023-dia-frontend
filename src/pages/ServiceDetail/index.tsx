@@ -21,6 +21,8 @@ import {
   addServiceToDraft,
 } from '../../internal/services';
 
+import LoadAnimation from '../../components/LoadAnimation';
+
 const initialServiceData: Service = {
   id: -1,
   job: '',
@@ -49,6 +51,8 @@ const ServiceDetailPage: FC = () => {
   const draftServicesId = useServicesId();
   const draftId = useDraftId(); // идентификатор черновика
 
+  const [loaded, setLoaded] = useState(false);
+
   const btnDeleteHandler = async () => {
     const propsDelete: deleteServiceFromDraftProps = {
       serviceId: Number(serviceId),
@@ -68,6 +72,7 @@ const ServiceDetailPage: FC = () => {
     const propsService: getOneServiceProps = {
       serviceId: Number(serviceId),
       setService: setService,
+      setLoaded: setLoaded,
     };
     getOneService(propsService);
   }, []);
@@ -87,7 +92,7 @@ const ServiceDetailPage: FC = () => {
         Hазад
       </Button>
 
-      <div className='serviceCardMenuNav'>
+      <div className="serviceCardMenuNav">
         <Breadcrumbs links={breadcrumbsLinks} />
         {isUser && !draftServicesId.includes(Number(serviceId)) && (
           <div className="btnAddToDraft">
@@ -101,79 +106,89 @@ const ServiceDetailPage: FC = () => {
         )}
       </div>
 
-      <div className={`card-service-page2 ${isUser && draftServicesId && draftServicesId.includes(Number(serviceId)) ? 'inDraft': ''}`}>
-        <div className="card-service-img-page2">
-          <img
-            src={service.img}
-            alt="employee"
-            className="card-service-img-employee-page2"
-          />
+      <LoadAnimation loaded={loaded}>
+        <div
+          className={`card-service-page2 ${
+            isUser &&
+            draftServicesId &&
+            draftServicesId.includes(Number(serviceId))
+              ? 'inDraft'
+              : ''
+          }`}
+        >
+          <div className="card-service-img-page2">
+            <img
+              src={service.img}
+              alt="employee"
+              className="card-service-img-employee-page2"
+            />
+          </div>
+
+          <div className="card-service-data">
+            <div className="card-service-about-title">{service.job}</div>
+
+            <div className="card-service-short-info-about card-title">
+              Описание
+            </div>
+            <div className="card-service-short-info-about-ans card-title-ans">
+              {service.about}
+            </div>
+
+            <div className="card-service-short-info-age card-title">
+              Возрастные ограничения:
+            </div>
+            <div className="card-service-short-info-age-ans card-title-ans">
+              {service.age}+
+            </div>
+
+            <div className="card-service-short-info-salary card-title">
+              Заработная плата:
+            </div>
+            <div className="card-service-short-info-salary-ans card-title-ans">
+              {service.salary}
+            </div>
+
+            <div className="card-service-short-info-sex card-title card-title">
+              Пол:
+            </div>
+            <div className="card-service-short-info-sex-ans card-title-ans">
+              {service.sex === 'A'
+                ? 'Не важно'
+                : service.sex === 'M'
+                ? 'Мужской'
+                : 'Женский'}
+            </div>
+
+            <div className="card-service-short-info-date-start card-title">
+              Начало работы:
+            </div>
+            <div className="card-service-short-info-date-start-ans card-title-ans">
+              {moment(service.date_start).format('MM/DD/YYYY в HH:mm')}
+            </div>
+
+            <div className="card-service-short-info-date-end card-title">
+              Конец работы:
+            </div>
+            <div className="card-service-short-info-date-end-ans card-title-ans">
+              {moment(service.date_end).format('MM/DD/YYYY в HH:mm')}
+            </div>
+
+            <div className="card-service-short-info-rus card-title">
+              Наличие русского гражданства:
+            </div>
+            <div className="card-service-short-info-rus-ans card-title-ans">
+              {service.rus_passport ? 'Необходимо' : 'Нет необходимости'}
+            </div>
+
+            <div className="card-service-short-info-ins card-title">
+              Наличие медицинской страховки:
+            </div>
+            <div className="card-service-short-info-ins-ans card-title-ans title-last-ans">
+              {service.insurance ? 'Необходимо' : 'Нет необходимости'}
+            </div>
+          </div>
         </div>
-
-        <div className="card-service-data">
-          <div className="card-service-about-title">{service.job}</div>
-
-          <div className="card-service-short-info-about card-title">
-            Описание
-          </div>
-          <div className="card-service-short-info-about-ans card-title-ans">
-            {service.about}
-          </div>
-
-          <div className="card-service-short-info-age card-title">
-            Возрастные ограничения:
-          </div>
-          <div className="card-service-short-info-age-ans card-title-ans">
-            {service.age}+
-          </div>
-
-          <div className="card-service-short-info-salary card-title">
-            Заработная плата:
-          </div>
-          <div className="card-service-short-info-salary-ans card-title-ans">
-            {service.salary}
-          </div>
-
-          <div className="card-service-short-info-sex card-title card-title">
-            Пол:
-          </div>
-          <div className="card-service-short-info-sex-ans card-title-ans">
-            {service.sex === 'A'
-              ? 'Не важно'
-              : service.sex === 'M'
-              ? 'Мужской'
-              : 'Женский'}
-          </div>
-
-          <div className="card-service-short-info-date-start card-title">
-            Начало работы:
-          </div>
-          <div className="card-service-short-info-date-start-ans card-title-ans">
-            {moment(service.date_start).format('MM/DD/YYYY в HH:mm')}
-          </div>
-
-          <div className="card-service-short-info-date-end card-title">
-            Конец работы:
-          </div>
-          <div className="card-service-short-info-date-end-ans card-title-ans">
-            {moment(service.date_end).format('MM/DD/YYYY в HH:mm')}
-          </div>
-
-          <div className="card-service-short-info-rus card-title">
-            Наличие русского гражданства:
-          </div>
-          <div className="card-service-short-info-rus-ans card-title-ans">
-            {service.rus_passport ? 'Необходимо' : 'Нет необходимости'}
-          </div>
-
-          <div className="card-service-short-info-ins card-title">
-            Наличие медицинской страховки:
-          </div>
-          <div className="card-service-short-info-ins-ans card-title-ans title-last-ans">
-            {service.insurance ? 'Необходимо' : 'Нет необходимости'}
-          </div>
-        </div>
-      </div>
+      </LoadAnimation>
     </div>
   );
 };

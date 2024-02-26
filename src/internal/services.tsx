@@ -5,6 +5,9 @@ import {
   addServiceToDraftProps,
   filterServicesProps,
   getOneServiceProps,
+  deleteServiceProps,
+  deleteServiceAdminProps,
+  getOneServiceAdminProps,
 } from '../interfaces';
 import {
   updateCountServices,
@@ -30,6 +33,7 @@ export const getServices = async (
   dispatch: Dispatch<any>
 ) => {
   try {
+    props.setLoaded(true);
     let responseServices: AxiosResponse;
     if (!props.data.getParameters) {
       responseServices = await axios.get(`/api/v1/services/`);
@@ -55,6 +59,7 @@ export const getServices = async (
       dispatch(updateServicesId(arrayServiceId)); // список услуг с полями в заявке
       dispatch(updateCountServices(arrayServiceId.length));
     }
+    props.setLoaded(false);
     return 0;
   } catch (error) {
     props.setServices(mock_services);
@@ -66,11 +71,29 @@ export const getServices = async (
 // Получение услуги
 export const getOneService = async (props: getOneServiceProps) => {
   try {
+    props.setLoaded(true);
     const response = await axios.get(`/api/v1/services/${props.serviceId}/`);
     props.setService(response.data);
+    props.setLoaded(false);
   } catch (error) {
     if (typeof props.serviceId === 'string') {
-      props.setService(mock_services[0]);
+      props.setLoaded(false);
+      return mock_services[0];
+    } else {
+      console.error('Идентификатор не определен', error);
+    }
+  }
+};
+
+// Получение услуги на странице редактирования услуги админом
+export const getOneServiceAdmin = async (props: getOneServiceAdminProps) => {
+  try {
+    const response = await axios.get(`/api/v1/services/${props.serviceId}/`);
+    const returnData: Service = response.data;
+    return returnData;
+  } catch (error) {
+    if (typeof props.serviceId === 'string') {
+      return mock_services[0];
     } else {
       console.error('Идентификатор не определен', error);
     }
@@ -90,6 +113,27 @@ export const deleteServiceFromDraft = async (
     const arrayServiceId = getNumberArrayOfServicesId(response.data.services);
     dispatch(updateServicesId(arrayServiceId));
     dispatch(updateCountServices(arrayServiceId.length));
+  } catch (error) {
+    console.error('Ошибка удаления услуги из черновика', error);
+  }
+};
+
+// Удаление услуги из списка услуг
+export const deleteService = async (props: deleteServiceProps) => {
+  try {
+    const response = await axios.delete(
+      `/api/v1/services/${props.data.serviceId}/`
+    );
+    props.setServices(response.data);
+  } catch (error) {
+    console.error('Ошибка удаления услуги из черновика', error);
+  }
+};
+
+// Удаление услуги со страницы услуги
+export const deleteServiceAdmin = async (props: deleteServiceAdminProps) => {
+  try {
+    await axios.delete(`/api/v1/services/${props.serviceId}/`);
   } catch (error) {
     console.error('Ошибка удаления услуги из черновика', error);
   }
@@ -153,12 +197,12 @@ export const filterServices = async (
 
   // Получаем queryString для запроса списка услуг
   queryString += params.toString();
-  console.log(queryString);
   const propsGetServices: getServicesProps = {
     data: {
       getParameters: queryString,
     },
     setServices: props.setServices,
+    setLoaded: props.setLoaded,
   };
   const response: number = await getServices(propsGetServices, dispatch);
 

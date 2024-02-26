@@ -6,7 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 //////// страницы
 import ListServicesPage from './pages/ServiceList/index.tsx'; // список услуг
 import ServiceDetailPage from './pages/ServiceDetail/index.tsx'; // страница с услугой (админ сможет редактировать)
-import ServiceDetailEditPage from './pages/ServiceDetailEdit/index.tsx';
+import ServiceDetailEditPage from './pages/ServiceDetailEdit/index.tsx'; // страница редактирования услуги 
+import ServiceTablePage from './pages/ServiceTable/index.tsx';
 
 import BidListPage from './pages/BidTable/index.tsx'; // список заявок
 import BidDetailPage from './pages/BidDetail/index.tsx'; // страница заявки
@@ -67,6 +68,10 @@ const StartPage: FC = () => {
         )}
         {isAdmin && (
           <>
+            <Route
+              path="/services/edit/"
+              element={<ServiceTablePage />}
+            />
             <Route
               path="/services/:serviceId/edit/"
               element={<ServiceDetailEditPage />}

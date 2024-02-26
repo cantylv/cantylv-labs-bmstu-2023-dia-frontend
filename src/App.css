@@ -207,11 +207,22 @@ body {
 
 .card-service-img {
   height: 320px;
+  
 }
 
 .card-service-img-employee-page2 {
   height: 100%;
   width: 100%;
+}
+
+.service-img {
+  width: 500px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.row-service-img {
+  border-radius: 10px;
 }
 
 /* Данные о сотруднике */

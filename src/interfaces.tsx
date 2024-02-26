@@ -13,6 +13,20 @@ export interface Service {
   date_end: string;
 }
 
+export interface ServiceDataChange {
+  job?: string;
+  img?: File | null; // нужно посмотреть, что будет, если я отправлю на бек пустое поле с картинкой
+  about?: string;
+  age?: number;
+  sex?: string;
+  rus_passport?: boolean;
+  insurance?: boolean;
+  status?: boolean;
+  salary?: number;
+  date_start?: string;
+  date_end?: string;
+}
+
 export interface User {
   id: number;
   username: string;
@@ -44,6 +58,7 @@ export interface getServicesProps {
     getParameters: string;
   };
   setServices: (services: Service[]) => void;
+  setLoaded: (is_loading: boolean) => void;
 }
 
 export interface getBidsProps {
@@ -57,7 +72,6 @@ export interface deleteServiceFromDraftProps {
   serviceId: number;
   draftId: number;
 }
-
 
 export interface addServiceToDraftProps {
   serviceId: number;
@@ -77,10 +91,23 @@ export interface filterServicesProps {
     draftId: number | undefined;
   };
   setServices: (services: Service[]) => void;
+  setLoaded: (is_loading: boolean) => void;
 }
 
 export interface ServiceFilterMenuProps {
   setServices: (services: Service[]) => void;
+  setLoaded: (is_loading: boolean) => void;
+}
+
+export interface deleteServiceProps {
+  data: {
+    serviceId: Number;
+  };
+  setServices: (services: Service[]) => void;
+}
+
+export interface deleteServiceAdminProps {
+  serviceId: Number;
 }
 
 export interface BidFilterMenuProps {
@@ -91,6 +118,12 @@ export interface BidFilterMenuProps {
 export interface getOneServiceProps {
   serviceId: number;
   setService: (services: Service) => void;
+  setLoaded: (is_loading: boolean) => void;
+}
+
+export interface getOneServiceAdminProps {
+  serviceId: number;
+  setLoaded: (is_loading: boolean) => void;
 }
 
 export interface SignUpProps {

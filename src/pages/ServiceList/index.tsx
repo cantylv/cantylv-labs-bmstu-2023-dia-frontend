@@ -13,9 +13,12 @@ import Breadcrumbs, { BreadcrumbLink } from '../../components/breadcrumb';
 // internal функции для работы с состояниями (удалению/добавление услуги в черновик, а также получение списка услуг)
 import { getServices } from '../../internal/services';
 import { Service, getServicesProps } from '../../interfaces';
+import LoadAnimation from '../../components/LoadAnimation';
 
 const ListServicesPage: FC = () => {
   const dispatch = useDispatch(); // для того, чтобы менять состояние стора
+
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   const [services, setServices] = useState<Service[]>([]); // список услуг, отображаемых на странице
 
@@ -25,6 +28,7 @@ const ListServicesPage: FC = () => {
         getParameters: '',
       },
       setServices: setServices,
+      setLoaded: setLoaded,
     };
     getServices(props, dispatch);
   }, []);
@@ -47,11 +51,13 @@ const ListServicesPage: FC = () => {
 
       <Breadcrumbs links={breadcrumbsLinks} />
 
-      <div className="services">
-        {services.map((item, index) => (
-          <ServiceCard key={index} data={item} />
-        ))}
-      </div>
+      <LoadAnimation loaded={loaded}>
+        <div className="services">
+          {services.map((item, index) => (
+            <ServiceCard key={index} data={item} />
+          ))}
+        </div>
+      </LoadAnimation>
     </div>
   );
 };
