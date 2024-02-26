@@ -62,6 +62,7 @@ export const getServices = async (
     props.setLoaded(false);
     return 0;
   } catch (error) {
+    props.setLoaded(false);
     props.setServices(mock_services);
     console.error('Ошибка при запросе списка услуг:', error);
     return -1;
@@ -76,12 +77,8 @@ export const getOneService = async (props: getOneServiceProps) => {
     props.setService(response.data);
     props.setLoaded(false);
   } catch (error) {
-    if (typeof props.serviceId === 'string') {
-      props.setLoaded(false);
-      return mock_services[0];
-    } else {
-      console.error('Идентификатор не определен', error);
-    }
+    props.setLoaded(false);
+    return props.setService(mock_services[props.serviceId - 1]);
   }
 };
 

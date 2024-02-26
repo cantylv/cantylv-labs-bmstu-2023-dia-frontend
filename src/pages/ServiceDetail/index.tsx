@@ -9,7 +9,6 @@ import moment from 'moment'; // для преобразования DateTimeFiel
 import { Service } from '../../interfaces';
 import { useDispatch } from 'react-redux';
 import { useServicesId, useDraftId } from '../../store/slices/draftSlice';
-import { useIsUser } from '../../store/slices/authSlice';
 import {
   getOneServiceProps,
   deleteServiceFromDraftProps,
@@ -42,7 +41,7 @@ const ServiceDetailPage: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const isUser = useIsUser();
+  const isUser = localStorage.getItem('isUser') == 'true';
 
   const { serviceId } = useParams(); // serviceId <- строка - значение идентификатора услуги
 
