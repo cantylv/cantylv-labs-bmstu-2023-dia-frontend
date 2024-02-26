@@ -6,9 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
   logout,
-  useIsAdmin,
-  useIsAuth,
-  useIsUser,
   useUsername,
 } from '../../store/slices/authSlice';
 import axios from 'axios';
@@ -29,9 +26,9 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const isAuth = useIsAuth();
-  const isAdmin = useIsAdmin();
-  const isUser = useIsUser();
+  const isAuth = localStorage.getItem('isAuth') === 'true';
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  const isUser = localStorage.getItem('isUser') === 'true';
   const username = useUsername();
 
   const draftId = useDraftId();

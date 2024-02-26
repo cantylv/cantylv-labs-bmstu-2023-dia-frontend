@@ -120,6 +120,12 @@ const BidPage = () => {
     ];
   }
 
+  if (isAdmin) {
+    breadcrumbsLinks = [
+      { label: 'Список пользователських заявок', url: '/bids/' },
+      { label: `Заявка  пользователя ${bid.user.username}`, url: `/bids/${Number(bidId)}/` },
+    ];
+  }
   return (
     <Container>
       <Breadcrumbs links={breadcrumbsLinks} />

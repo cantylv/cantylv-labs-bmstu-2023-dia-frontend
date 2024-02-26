@@ -47,7 +47,7 @@ const ListServicesPage: FC = () => {
         работай спокойно вместе с сервисом для внештатного персонала ПодJOBка!
       </div>
 
-      <ServiceFilterMenu setServices={setServices} />
+      <ServiceFilterMenu setServices={setServices} setLoaded={setLoaded}/>
 
       <Breadcrumbs links={breadcrumbsLinks} />
 

@@ -8,7 +8,12 @@ import {
   deleteServiceAdminProps,
   ServiceDataChange,
 } from '../../interfaces';
-import { deleteServiceAdmin, getOneServiceAdmin } from '../../internal/services';
+import {
+  deleteServiceAdmin,
+  getOneServiceAdmin,
+} from '../../internal/services';
+
+import Breadcrumbs, { BreadcrumbLink } from '../../components/breadcrumb';
 
 // для красивого отображения страницы
 import Form from 'react-bootstrap/Form';
@@ -41,14 +46,27 @@ const ServiceDetailEditPage: FC = () => {
   const [loaded, setLoaded] = useState(false);
 
   const putServiceData = async (data: ServiceDataChange) => {
-    console.log(data);
     await axios
       .put(`/api/v1/services/${serviceId}/`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
-      .then(() => {});
+      .then((service) => {
+        if (service) {
+          setJob(service.data.job);
+          setImg(service.data.img);
+          setAbout(service.data.about);
+          setAge(service.data.age);
+          setSex(service.data.sex);
+          setRusPassport(service.data.rus_passport);
+          setInsurance(service.data.insurance);
+          setStatus(service.data.status);
+          setSalary(service.data.salary);
+          setDateStart(new Date(service.data.date_start));
+          setDateEnd(new Date(service.data.date_end));
+        }
+      });
   };
 
   useEffect(() => {
@@ -73,7 +91,7 @@ const ServiceDetailEditPage: FC = () => {
     });
   }, []);
 
-  const btnApplyChangesHandler = () => {
+  const btnApplyChangesHandler = async () => {
     let updateServiceData: ServiceDataChange = {
       job: job,
       about: about,
@@ -105,153 +123,161 @@ const ServiceDetailEditPage: FC = () => {
     });
   };
 
+  const breadcrumbsLinks: BreadcrumbLink[] = [
+    { label: 'Редактирование видов деятельности', url: '/services/edit/' },
+    { label: job || '', url: `/services/${serviceId}/` },
+  ];
+
   return (
-    <LoadAnimation loaded={loaded}>
-      <Container>
-        <Row className="row-service-img">
-          <Image src={img} className="service-img" thumbnail />
-        </Row>
+    <Container>
+      <Breadcrumbs links={breadcrumbsLinks} />
+      <LoadAnimation loaded={loaded}>
+        <Container>
+          <Row className="row-service-img">
+            <Image src={img} className="service-img" thumbnail />
+          </Row>
 
-        <Form>
-          <Form.Group className="mb-3" controlId="serviceJobArea">
-            <Form.Label>Название услуги</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Сантехнические работы"
-              value={job}
-              onChange={(event) => {
-                setJob(event.target.value);
-              }}
-            />
-          </Form.Group>
+          <Form>
+            <Form.Group className="mb-3" controlId="serviceJobArea">
+              <Form.Label>Название услуги</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Сантехнические работы"
+                value={job}
+                onChange={(event) => {
+                  setJob(event.target.value);
+                }}
+              />
+            </Form.Group>
 
-          <Form.Group className="mb-3" controlId="serviceAboutArea">
-            <Form.Label>Об услуге</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              value={about}
-              onChange={(event) => {
-                setAbout(event.target.value);
-              }}
-            />
-          </Form.Group>
+            <Form.Group className="mb-3" controlId="serviceAboutArea">
+              <Form.Label>Об услуге</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={about}
+                onChange={(event) => {
+                  setAbout(event.target.value);
+                }}
+              />
+            </Form.Group>
 
-          <Form.Group className="mb-3" controlId="serviceAgeArea">
-            <Form.Label>Возраст от:</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="18"
-              value={age}
-              onChange={(event) => {
-                setAge(Number(event.target.value));
-              }}
-            />
-          </Form.Group>
+            <Form.Group className="mb-3" controlId="serviceAgeArea">
+              <Form.Label>Возраст от:</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="18"
+                value={age}
+                onChange={(event) => {
+                  setAge(Number(event.target.value));
+                }}
+              />
+            </Form.Group>
 
-          <Form.Group className="mb-3" controlId="serviceSexArea">
-            <Form.Label>Пол</Form.Label>
-            <Form.Select
-              aria-label="sexServiceSelect"
-              value={sex}
-              onChange={(event) => {
-                setSex(event.target.value);
+            <Form.Group className="mb-3" controlId="serviceSexArea">
+              <Form.Label>Пол</Form.Label>
+              <Form.Select
+                aria-label="sexServiceSelect"
+                value={sex}
+                onChange={(event) => {
+                  setSex(event.target.value);
+                }}
+              >
+                <option value="A">Не важно</option>
+                <option value="M">Мужской</option>
+                <option value="W">Женский</option>
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="servicePassportArea">
+              <Form.Label>Наличие Российского гражданства</Form.Label>
+              <div className="mb-3">
+                <Form.Check
+                  checked={rusPassport}
+                  type="checkbox"
+                  label="Обязательно"
+                  onChange={(event) => {
+                    setRusPassport(event.target.checked);
+                  }}
+                />
+              </div>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="serviceInsuranceArea">
+              <Form.Label>Наличие медицинской страховки</Form.Label>
+              <div className="mb-3">
+                <Form.Check
+                  checked={insurance}
+                  type="checkbox"
+                  label="Обязательно"
+                  onChange={(event) => {
+                    setInsurance(event.target.checked);
+                  }}
+                />
+              </div>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="serviceStatusArea">
+              <Form.Label>Статус</Form.Label>
+              <div className="mb-3">
+                <Form.Check
+                  checked={status}
+                  type="checkbox"
+                  label="Активна"
+                  onChange={(event) => {
+                    setStatus(event.target.checked);
+                  }}
+                />
+              </div>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="serviceJobArea">
+              <Form.Label>Зарплата</Form.Label>
+              <InputGroup className="mb-3">
+                <InputGroup.Text>RUB</InputGroup.Text>
+                <Form.Control
+                  value={salary}
+                  placeholder="Сдельная стоимость услуги"
+                  onChange={(event) => {
+                    setSalary(Number(event.target.value));
+                  }}
+                />
+              </InputGroup>
+            </Form.Group>
+
+            <Form.Group controlId="formFile" className="mb-3">
+              <Form.Label>Поменять изображение услуги</Form.Label>
+              <Form.Control
+                type="file"
+                onChange={(event) => {
+                  const files = (event.target as HTMLInputElement).files;
+                  if (files && files.length > 0) {
+                    const selectedFile = files[0];
+                    setFile(selectedFile);
+                  }
+                }}
+              />
+            </Form.Group>
+
+            <Button
+              variant="primary"
+              className="me-3"
+              onClick={btnApplyChangesHandler}
+            >
+              Сохранить изменения
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                btnDeleteHandler(Number(serviceId));
               }}
             >
-              <option value="A">Не важно</option>
-              <option value="M">Мужской</option>
-              <option value="W">Женский</option>
-            </Form.Select>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="servicePassportArea">
-            <Form.Label>Наличие Российского гражданства</Form.Label>
-            <div className="mb-3">
-              <Form.Check
-                checked={rusPassport}
-                type="checkbox"
-                label="Обязательно"
-                onChange={(event) => {
-                  setRusPassport(event.target.checked);
-                }}
-              />
-            </div>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="serviceInsuranceArea">
-            <Form.Label>Наличие медицинской страховки</Form.Label>
-            <div className="mb-3">
-              <Form.Check
-                checked={insurance}
-                type="checkbox"
-                label="Обязательно"
-                onChange={(event) => {
-                  setInsurance(event.target.checked);
-                }}
-              />
-            </div>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="serviceStatusArea">
-            <Form.Label>Статус</Form.Label>
-            <div className="mb-3">
-              <Form.Check
-                checked={status}
-                type="checkbox"
-                label="Активна"
-                onChange={(event) => {
-                  setStatus(event.target.checked);
-                }}
-              />
-            </div>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="serviceJobArea">
-            <Form.Label>Зарплата</Form.Label>
-            <InputGroup className="mb-3">
-              <InputGroup.Text>RUB</InputGroup.Text>
-              <Form.Control
-                value={salary}
-                placeholder="Сдельная стоимость услуги"
-                onChange={(event) => {
-                  setSalary(Number(event.target.value));
-                }}
-              />
-            </InputGroup>
-          </Form.Group>
-
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Поменять изображение услуги</Form.Label>
-            <Form.Control
-              type="file"
-              onChange={(event) => {
-                const files = (event.target as HTMLInputElement).files;
-                if (files && files.length > 0) {
-                  const selectedFile = files[0];
-                  setFile(selectedFile);
-                }
-              }}
-            />
-          </Form.Group>
-
-          <Button
-            variant="primary"
-            className="me-3"
-            onClick={btnApplyChangesHandler}
-          >
-            Сохранить изменения
-          </Button>
-          <Button
-            variant="primary"
-            onClick={() => {
-              btnDeleteHandler(Number(serviceId));
-            }}
-          >
-            Удалить услугу
-          </Button>
-        </Form>
-      </Container>
-    </LoadAnimation>
+              Удалить услугу
+            </Button>
+          </Form>
+        </Container>
+      </LoadAnimation>
+    </Container>
   );
 };
 
