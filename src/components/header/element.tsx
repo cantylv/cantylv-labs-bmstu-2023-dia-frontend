@@ -1,34 +1,135 @@
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import Logo from '../../assets/icons/logo.svg'
+import Logo from '../../assets/icons/logo.svg';
 import { Button } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {
+  logout,
+  useUsername,
+} from '../../store/slices/authSlice';
+import axios from 'axios';
+import profile from '../../assets/profile.png';
+import Image from 'react-bootstrap/Image';
+import Badge from 'react-bootstrap/Badge';
+import trash from '../../assets/trash.png';
+import {
+  useDraftId,
+  useCountServices,
+  useServicesId,
+} from '../../store/slices/draftSlice';
+
+import { deleteServiceFromDraft } from '../../internal/services';
+import { deleteServiceFromDraftProps } from '../../interfaces';
 
 function Header() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    return (
-        <Navbar expand="lg" className="container" data-bs-theme="light">
-            <div className='menu'>
-                <Navbar.Brand href="/labs-bmstu-2023-dia-frontend/">
-                    <img src={Logo} alt='Логотип сервиса' />
-                </Navbar.Brand>
+  const isAuth = localStorage.getItem('isAuth') === 'true';
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  const isUser = localStorage.getItem('isUser') === 'true';
+  const username = useUsername();
 
-                <div className='page-links'>
-                    <Nav.Link href="#lk">Личный кабинет</Nav.Link>
-                    <Nav.Link href="/labs-bmstu-2023-dia-frontend/">Список услуг</Nav.Link>
-                    <Nav.Link href="#list_bid">Мои заявок</Nav.Link>
-                    <Nav.Link href="#about">О компании</Nav.Link>
-                </div>
-            </div>
+  const draftId = useDraftId();
+  const countServices = useCountServices();
+  const servicesId = useServicesId();
 
-            <div className='block-auth'>
-                <Button className='block-auth-btn' onClick={() => { navigate(`/labs-bmstu-2023-dia-frontend/`) }}>Регистрация</Button>
-                <Button className='block-auth-btn' onClick={() => { navigate(`/labs-bmstu-2023-dia-frontend/`) }}>Вход</Button>
-            </div>
+  const btnExitHandler = () => {
+    try {
+      axios.post(`/api/v1/logout/`);
+      localStorage.clear();
+      dispatch(logout());
+      // удалим все услуги из заявки
+      if (servicesId) {
+        servicesId.forEach((service_id) => {
+          const propsDeleteAllServices: deleteServiceFromDraftProps = {
+            serviceId: service_id,
+            draftId: draftId,
+          };
+          deleteServiceFromDraft(propsDeleteAllServices, dispatch);
+        });
+      }
+      navigate('/');
+    } catch (error) {
+      console.error('Ошибка при деавторизации:', error);
+    }
+  };
 
-        </Navbar>
-    );
+  return (
+    <Navbar expand="lg" className="container" data-bs-theme="light">
+      <div className="menu">
+        <Navbar.Brand>
+          <img
+            src={Logo}
+            alt="Логотип сервиса"
+            className="logo"
+            onClick={() => navigate('/')}
+          />
+        </Navbar.Brand>
+
+        <Nav className="page-links">
+          <Nav.Link onClick={() => navigate('/')}>Виды деятельности</Nav.Link>
+          {isUser && (
+            <Nav.Link onClick={() => navigate('/bids/')}>Мои заявки</Nav.Link>
+          )}
+          {isAdmin && (
+            <>
+              <Nav.Link onClick={() => navigate('/bids/')}>
+                Список пользовательских заявок
+              </Nav.Link>
+              <Nav.Link onClick={() => navigate('/services/edit/')}>
+                Редактирование видов деятельности
+              </Nav.Link>
+            </>
+          )}
+        </Nav>
+      </div>
+
+      {!isAuth && (
+        <div className="block-auth">
+          <Button
+            className="me-3"
+            onClick={() => {
+              navigate(`/reg/`);
+            }}
+          >
+            Регистрация
+          </Button>
+          <Button
+            onClick={() => {
+              navigate(`/login/`);
+            }}
+          >
+            Вход
+          </Button>
+        </div>
+      )}
+      {isAuth && (
+        <div className="block-auth">
+          <div className="profileBlock">
+            {isUser && (
+              <>
+                <span className="trashBlock">
+                  <Image
+                    src={trash}
+                    className="imgTrash"
+                    onClick={() => navigate(`/bids/${draftId}/`)}
+                  />
+                  <Badge bg="danger" className="badgeTrash">
+                    {countServices ? countServices : ''}
+                  </Badge>
+                </span>
+              </>
+            )}
+            <Image src={profile} className="profile-img" roundedCircle />
+            <span>{username}</span>
+          </div>
+          <Button onClick={btnExitHandler}>Выход</Button>
+        </div>
+      )}
+    </Navbar>
+  );
 }
 
 export default Header;
