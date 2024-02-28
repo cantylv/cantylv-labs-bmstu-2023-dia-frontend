@@ -18,4 +18,4 @@ export default defineConfig({
 // python manage.py runserver 172.20.10.9
 // поменять в SaveClientMinio URI по которому сохраняется изображение
 // в XCode поменять в ServiceAPI ip-адрес сервера
-// поменять в конфиге vit
+// поменять в конфиге vite
