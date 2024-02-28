@@ -8,6 +8,7 @@ import {
   deleteServiceProps,
   deleteServiceAdminProps,
   getOneServiceAdminProps,
+  deleteAllServicesFromDraftProps,
 } from '../interfaces';
 import {
   updateCountServices,
@@ -42,7 +43,6 @@ export const getServices = async (
         `/api/v1/services/?${props.data.getParameters}`
       );
     }
-
     props.setServices(responseServices.data.services);
     // если есть заявка-черновик, она придет в поле draft_id
     if (responseServices.data?.draft_id) {
@@ -110,6 +110,20 @@ export const deleteServiceFromDraft = async (
     const arrayServiceId = getNumberArrayOfServicesId(response.data.services);
     dispatch(updateServicesId(arrayServiceId));
     dispatch(updateCountServices(arrayServiceId.length));
+  } catch (error) {
+    console.error('Ошибка удаления услуги из черновика', error);
+  }
+};
+
+export const deleteAllServicesFromDraft = async (
+  props: deleteAllServicesFromDraftProps,
+  dispatch: Dispatch<any>
+) => {
+  try {
+    await axios.delete(`/api/v1/bids/${props.draftId}/delete_services/`, {});
+    dispatch(updateDraftServices([]));
+    dispatch(updateServicesId([]));
+    dispatch(updateCountServices(0));
   } catch (error) {
     console.error('Ошибка удаления услуги из черновика', error);
   }

@@ -13,6 +13,10 @@ export interface Service {
   date_end: string;
 }
 
+export interface deleteAllServicesFromDraftProps {
+  draftId: number;
+}
+
 export interface ServiceDataChange {
   job?: string;
   img?: File | null; // нужно посмотреть, что будет, если я отправлю на бек пустое поле с картинкой

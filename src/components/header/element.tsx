@@ -4,23 +4,16 @@ import Logo from '../../assets/icons/logo.svg';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-  logout,
-  useUsername,
-} from '../../store/slices/authSlice';
+import { logout, useUsername } from '../../store/slices/authSlice';
 import axios from 'axios';
 import profile from '../../assets/profile.png';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import trash from '../../assets/trash.png';
-import {
-  useDraftId,
-  useCountServices,
-  useServicesId,
-} from '../../store/slices/draftSlice';
+import { useDraftId, useCountServices } from '../../store/slices/draftSlice';
 
-import { deleteServiceFromDraft } from '../../internal/services';
-import { deleteServiceFromDraftProps } from '../../interfaces';
+import { deleteAllServicesFromDraftProps } from '../../interfaces';
+import { deleteAllServicesFromDraft } from '../../internal/services';
 
 function Header() {
   const navigate = useNavigate();
@@ -33,23 +26,16 @@ function Header() {
 
   const draftId = useDraftId();
   const countServices = useCountServices();
-  const servicesId = useServicesId();
 
   const btnExitHandler = () => {
     try {
       axios.post(`/api/v1/logout/`);
       localStorage.clear();
+      const propsDeleteAllServices: deleteAllServicesFromDraftProps = {
+        draftId: draftId,
+      };
+      deleteAllServicesFromDraft(propsDeleteAllServices, dispatch);
       dispatch(logout());
-      // удалим все услуги из заявки
-      if (servicesId) {
-        servicesId.forEach((service_id) => {
-          const propsDeleteAllServices: deleteServiceFromDraftProps = {
-            serviceId: service_id,
-            draftId: draftId,
-          };
-          deleteServiceFromDraft(propsDeleteAllServices, dispatch);
-        });
-      }
       navigate('/');
     } catch (error) {
       console.error('Ошибка при деавторизации:', error);
