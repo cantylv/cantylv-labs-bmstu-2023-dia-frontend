@@ -14,6 +14,12 @@ import {
 } from '../../internal/services';
 
 import Breadcrumbs, { BreadcrumbLink } from '../../components/breadcrumb';
+// календарь
+import DatePicker, { registerLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import ru from 'date-fns/locale/ru';
+
+registerLocale('ru', ru);
 
 // для красивого отображения страницы
 import Form from 'react-bootstrap/Form';
@@ -29,14 +35,14 @@ const ServiceDetailEditPage: FC = () => {
   const [job, setJob] = useState<string>('');
   const [img, setImg] = useState<string>(''); // для отображения услуги
   const [about, setAbout] = useState<string>('');
-  const [age, setAge] = useState<number>(0);
+  const [age, setAge] = useState<number>(14);
   const [sex, setSex] = useState<string>('A');
   const [rusPassport, setRusPassport] = useState<boolean>(false);
   const [insurance, setInsurance] = useState<boolean>(false);
   const [status, setStatus] = useState<boolean>(true);
   const [salary, setSalary] = useState<number>(0);
-  const [dateStart, setDateStart] = useState<Date>();
-  const [dateEnd, setDateEnd] = useState<Date>();
+  const [dateStart, setDateStart] = useState<Date | null>();
+  const [dateEnd, setDateEnd] = useState<Date | null>();
 
   const [file, setFile] = useState<File | null>();
 
@@ -46,49 +52,81 @@ const ServiceDetailEditPage: FC = () => {
   const [loaded, setLoaded] = useState(false);
 
   const putServiceData = async (data: ServiceDataChange) => {
-    await axios
-      .put(`/api/v1/services/${serviceId}/`, data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then((service) => {
-        if (service) {
-          setJob(service.data.job);
-          setImg(service.data.img);
-          setAbout(service.data.about);
-          setAge(service.data.age);
-          setSex(service.data.sex);
-          setRusPassport(service.data.rus_passport);
-          setInsurance(service.data.insurance);
-          setStatus(service.data.status);
-          setSalary(service.data.salary);
-          setDateStart(new Date(service.data.date_start));
-          setDateEnd(new Date(service.data.date_end));
-        }
-      });
+    if (serviceId) {
+      await axios
+        .put(`/api/v1/services/${serviceId}/`, data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((service) => {
+          if (service) {
+            setJob(service.data.job);
+            setImg(service.data.img);
+            setAbout(service.data.about);
+            setAge(service.data.age);
+            setSex(service.data.sex);
+            setRusPassport(service.data.rus_passport);
+            setInsurance(service.data.insurance);
+            setStatus(service.data.status);
+            setSalary(service.data.salary);
+            setDateStart(new Date(service.data.date_start));
+            setDateEnd(new Date(service.data.date_end));
+          }
+        });
+    } else {
+      await axios
+        .post(`/api/v1/services/`, data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((service) => {
+          if (service) {
+            setJob(service.data.job);
+            setImg(service.data.img);
+            setAbout(service.data.about);
+            setAge(service.data.age);
+            setSex(service.data.sex);
+            setRusPassport(service.data.rus_passport);
+            setInsurance(service.data.insurance);
+            setStatus(service.data.status);
+            setSalary(service.data.salary);
+            setDateStart(new Date(service.data.date_start));
+            setDateEnd(new Date(service.data.date_end));
+          }
+          return service;
+        })
+        .then((service) => {
+          navigate(`/services/${service.data.id}/edit/`);
+        });
+    }
   };
 
   useEffect(() => {
-    const props: getOneServiceAdminProps = {
-      serviceId: Number(serviceId),
-      setLoaded: setLoaded,
-    };
-    getOneServiceAdmin(props).then((service) => {
-      if (service) {
-        setJob(service.job);
-        setImg(service.img);
-        setAbout(service.about);
-        setAge(service.age);
-        setSex(service.sex);
-        setRusPassport(service.rus_passport);
-        setInsurance(service.insurance);
-        setStatus(service.status);
-        setSalary(service.salary);
-        setDateStart(new Date(service.date_start));
-        setDateEnd(new Date(service.date_end));
-      }
-    });
+    if (serviceId) {
+      const props: getOneServiceAdminProps = {
+        serviceId: Number(serviceId),
+        setLoaded: setLoaded,
+      };
+      getOneServiceAdmin(props).then((service) => {
+        if (service) {
+          setJob(service.job);
+          setImg(service.img);
+          setAbout(service.about);
+          setAge(service.age);
+          setSex(service.sex);
+          setRusPassport(service.rus_passport);
+          setInsurance(service.insurance);
+          setStatus(service.status);
+          setSalary(service.salary);
+          setDateStart(new Date(service.date_start));
+          setDateEnd(new Date(service.date_end));
+        }
+      });
+    } else {
+      setImg('http://localhost:9000/services/default.jpg');
+    }
   }, []);
 
   const btnApplyChangesHandler = async () => {
@@ -125,7 +163,10 @@ const ServiceDetailEditPage: FC = () => {
 
   const breadcrumbsLinks: BreadcrumbLink[] = [
     { label: 'Редактирование видов деятельности', url: '/services/edit/' },
-    { label: job || '', url: `/services/${serviceId}/` },
+    {
+      label: serviceId ? job : 'Новая заявка' || '',
+      url: `/services/${serviceId}/`,
+    },
   ];
 
   return (
@@ -140,6 +181,7 @@ const ServiceDetailEditPage: FC = () => {
           <Form>
             <Form.Group className="mb-3" controlId="serviceJobArea">
               <Form.Label>Название услуги</Form.Label>
+              <span className="requiredText">*Обязательное поле</span>
               <Form.Control
                 type="text"
                 placeholder="Сантехнические работы"
@@ -185,7 +227,7 @@ const ServiceDetailEditPage: FC = () => {
               >
                 <option value="A">Не важно</option>
                 <option value="M">Мужской</option>
-                <option value="W">Женский</option>
+                <option value="F">Женский</option>
               </Form.Select>
             </Form.Group>
 
@@ -233,6 +275,7 @@ const ServiceDetailEditPage: FC = () => {
 
             <Form.Group className="mb-3" controlId="serviceJobArea">
               <Form.Label>Зарплата</Form.Label>
+              <span className="requiredText">*Обязательное поле</span>
               <InputGroup className="mb-3">
                 <InputGroup.Text>RUB</InputGroup.Text>
                 <Form.Control
@@ -259,6 +302,31 @@ const ServiceDetailEditPage: FC = () => {
               />
             </Form.Group>
 
+            <Form.Label>Установить время выполнения работы</Form.Label>
+            <span className="requiredText">*Обязательное поле</span>
+            <InputGroup className="searchTextInput mb-3 mt-2">
+              <InputGroup.Text className="textDateStart">
+                Начало работы с
+              </InputGroup.Text>
+              <DatePicker
+                locale="ru"
+                className="datepicker"
+                selected={dateStart}
+                onChange={(date) => {
+                  setDateStart(date);
+                }}
+              />
+              <InputGroup.Text className="textDateEnd">По</InputGroup.Text>
+              <DatePicker
+                locale="ru"
+                className="datepicker"
+                selected={dateEnd}
+                onChange={(date) => {
+                  setDateEnd(date);
+                }}
+              />
+            </InputGroup>
+
             <Button
               variant="primary"
               className="me-3"
@@ -266,14 +334,16 @@ const ServiceDetailEditPage: FC = () => {
             >
               Сохранить изменения
             </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                btnDeleteHandler(Number(serviceId));
-              }}
-            >
-              Удалить услугу
-            </Button>
+            {serviceId && (
+              <Button
+                variant="primary"
+                onClick={() => {
+                  btnDeleteHandler(Number(serviceId));
+                }}
+              >
+                Удалить услугу
+              </Button>
+            )}
           </Form>
         </Container>
       </LoadAnimation>

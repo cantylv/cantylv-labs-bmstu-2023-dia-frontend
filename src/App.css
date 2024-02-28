@@ -442,6 +442,11 @@ li {
   width: auto;
 }
 
+.requiredText {
+  color: red;
+  font-size: 14px;
+}
+
 .salaryInput {
   width: 400px;
 }

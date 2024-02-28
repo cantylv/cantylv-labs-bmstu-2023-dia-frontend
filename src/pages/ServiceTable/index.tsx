@@ -83,7 +83,11 @@ const ServiceTablePage = () => {
 
   return (
     <Container className="bids">
-      <Breadcrumbs links={breadcrumbsLinks} />
+      <div>
+        <Breadcrumbs links={breadcrumbsLinks} />
+        <Button onClick={() => navigate('/services/new/')}>Создать услугу</Button>
+      </div>
+      
 
       <ServiceFilterMenu setServices={setServices} setLoaded={setLoaded}/>
 
