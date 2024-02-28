@@ -15,7 +15,7 @@ export default defineConfig({
   plugins: [react()],
 })
 
-// python manage.py runserver 192.168.0.100
+// python manage.py runserver 172.20.10.9
 // поменять в SaveClientMinio URI по которому сохраняется изображение
 // в XCode поменять в ServiceAPI ip-адрес сервера
 // поменять в конфиге vite
