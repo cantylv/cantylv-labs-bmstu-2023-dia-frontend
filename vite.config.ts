@@ -6,7 +6,7 @@ export default defineConfig({
   server: { port: 3000,
     proxy: {
       '/api/v1': {
-        target: 'http://0.0.0.0:8000',
+        target: 'http://172.20.10.9:8000',
         changeOrigin: true
       }
     }
@@ -14,3 +14,8 @@ export default defineConfig({
   base: "/",
   plugins: [react()],
 })
+
+// python manage.py runserver 192.168.0.100
+// поменять в SaveClientMinio URI по которому сохраняется изображение
+// в XCode поменять в ServiceAPI ip-адрес сервера
+// поменять в конфиге vite
