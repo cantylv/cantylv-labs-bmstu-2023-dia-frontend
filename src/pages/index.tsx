@@ -26,7 +26,6 @@ const ListServices: FC = () => {
       })
       .then((jsonData) => {
         setServices(jsonData.services);
-        console.log(jsonData)
       })
       .catch((error) => {
         setServices(mock_services);
