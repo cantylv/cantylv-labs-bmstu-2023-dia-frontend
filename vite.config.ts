@@ -13,7 +13,7 @@ export default defineConfig({
       },
     },
   },
-  base: '/',
+  base: '/labs-bmstu-2023-dia-frontend/',
   plugins: [
     react(),
     VitePWA({
@@ -23,7 +23,7 @@ export default defineConfig({
         name: 'Podjobka',
         short_name: 'Podjobka',
         description: 'Сайт для самозанятых, чтобы каждый нашел работу по душе',
-        start_url: '/',
+        start_url: '/labs-bmstu-2023-dia-frontend/',
         display: 'standalone',
         orientation: 'portrait-primary',
         theme_color: '#ffffff',
@@ -32,25 +32,21 @@ export default defineConfig({
             src: '16.png',
             sizes: '16x16',
             type: 'image/png',
-            purpose: 'any'
           },
           {
             src: '32.png',
             sizes: '32x32',
             type: 'image/png',
-            purpose: 'any'
           },
           {
             src: '80.png',
             sizes: '80x80',
             type: 'image/png',
-            purpose: 'any'
           },
           {
             src: '128.png',
             sizes: '128x128',
             type: 'image/png',
-            purpose: 'any'
           },
           {
             src: '192.png',

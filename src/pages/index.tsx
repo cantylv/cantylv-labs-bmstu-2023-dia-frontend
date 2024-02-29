@@ -102,7 +102,7 @@ const ListServices: FC = () => {
   };
 
   const breadcrumbsLinks: BreadcrumbLink[] = [
-    { label: 'Список услуг', url: '/' },
+    { label: 'Список услуг', url: '/labs-bmstu-2023-dia-frontend/' },
   ];
 
   return (
