@@ -42,17 +42,12 @@ function Header() {
     }
   };
 
-  return (
-    <Navbar expand="lg" className="container" data-bs-theme="light">
-      <div className="menu">
-        <Navbar.Brand>
-          <img
-            src={Logo}
-            alt="Логотип сервиса"
-            className="logo"
-            onClick={() => navigate('/')}
-          />
-        </Navbar.Brand>
+    return (
+        <Navbar expand="lg" className="container" data-bs-theme="light">
+            <div className='menu'>
+                <Navbar.Brand href="/">
+                    <img src={Logo} alt='Логотип сервиса' />
+                </Navbar.Brand>
 
         <Nav className="page-links">
           <Nav.Link onClick={() => navigate('/')}>Виды деятельности</Nav.Link>
@@ -72,50 +67,13 @@ function Header() {
         </Nav>
       </div>
 
-      {!isAuth && (
-        <div className="block-auth">
-          <Button
-            className="me-3"
-            onClick={() => {
-              navigate(`/reg/`);
-            }}
-          >
-            Регистрация
-          </Button>
-          <Button
-            onClick={() => {
-              navigate(`/login/`);
-            }}
-          >
-            Вход
-          </Button>
-        </div>
-      )}
-      {isAuth && (
-        <div className="block-auth">
-          <div className="profileBlock">
-            {isUser && (
-              <>
-                <span className="trashBlock">
-                  <Image
-                    src={trash}
-                    className="imgTrash"
-                    onClick={() => navigate(`/bids/${draftId}/`)}
-                  />
-                  <Badge bg="danger" className="badgeTrash">
-                    {countServices ? countServices : ''}
-                  </Badge>
-                </span>
-              </>
-            )}
-            <Image src={profile} className="profile-img" roundedCircle />
-            <span>{username}</span>
-          </div>
-          <Button onClick={btnExitHandler}>Выход</Button>
-        </div>
-      )}
-    </Navbar>
-  );
+            <div className='block-auth'>
+                <Button className='block-auth-btn' onClick={() => { navigate(`/`) }}>Регистрация</Button>
+                <Button className='block-auth-btn' onClick={() => { navigate(`/`) }}>Вход</Button>
+            </div>
+
+        </Navbar>
+    );
 }
 
 export default Header;

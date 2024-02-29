@@ -54,34 +54,8 @@ const StartPage: FC = () => {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/" element={<ListServicesPage />} />
-        <Route path="/services/:serviceId/" element={<ServiceDetailPage />} />
-
-        <Route path="/login/" element={<LoginPage />} />
-        <Route path="/reg/" element={<RegistrationPage />} />
-
-        {isAuth && (
-          <>
-            <Route path="/bids/" element={<BidListPage />} />
-            <Route path="/bids/:bidId/" element={<BidDetailPage />} />
-          </>
-        )}
-        {isAdmin && (
-          <>
-            <Route
-              path="/services/edit/"
-              element={<ServiceTablePage />}
-            />
-            <Route
-              path="/services/new/"
-              element={<ServiceDetailEditPage />}
-            />
-            <Route
-              path="/services/:serviceId/edit/"
-              element={<ServiceDetailEditPage />}
-            />
-          </>
-        )}
+        <Route path="/" element={<ListServices />} />
+        <Route path='/services/:service_id/' element={<ServicePage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
