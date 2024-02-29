@@ -69,6 +69,10 @@ const StartPage: FC = () => {
         {isAdmin && (
           <>
             <Route
+              path="/services/new/"
+              element={<ServiceDetailEditPage />}
+            />
+            <Route
               path="/services/edit/"
               element={<ServiceTablePage />}
             />

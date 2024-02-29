@@ -373,6 +373,24 @@ li {
   font-size: 15px;
 }
 
+.menuServiceTable {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.dangerText {
+  color: red;
+  font-size: 14px;
+}
+
+.timeWorkLabel {
+  margin-bottom: 8px;
+  margin-right: 10px;
+}
+
 .salaryBlock {
   padding: 10.25px 8px 10.25px 8px;
   font-size: 0.9rem;
@@ -440,6 +458,10 @@ li {
 
 .searchTextInput {
   width: auto;
+}
+
+.dateTimeForm {
+  margin-bottom: 20px;
 }
 
 .salaryInput {

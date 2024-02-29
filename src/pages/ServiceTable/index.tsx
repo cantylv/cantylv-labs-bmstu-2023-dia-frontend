@@ -44,8 +44,8 @@ const ServiceTablePage = () => {
   };
 
   const btnChangeInfo = (serviceId: number) => {
-    navigate(`/services/${serviceId}/edit/`)
-  }
+    navigate(`/services/${serviceId}/edit/`);
+  };
 
   useEffect(() => {
     const props: getServicesProps = {
@@ -83,9 +83,18 @@ const ServiceTablePage = () => {
 
   return (
     <Container className="bids">
-      <Breadcrumbs links={breadcrumbsLinks} />
+      <div className="menuServiceTable">
+        <Breadcrumbs links={breadcrumbsLinks} />
+        <Button
+          onClick={() => {
+            navigate('/services/new/');
+          }}
+        >
+          Добавить новую запись
+        </Button>
+      </div>
 
-      <ServiceFilterMenu setServices={setServices} setLoaded={setLoaded}/>
+      <ServiceFilterMenu setServices={setServices} setLoaded={setLoaded} />
 
       <LoadAnimation loaded={loaded}>
         <Table bordered hover responsive className="servicesTable">
