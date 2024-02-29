@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/labs-bmstu-2023-dia-frontend/sw.js', { scope: '/labs-bmstu-2023-dia-frontend/' })})}
