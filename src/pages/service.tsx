@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Button } from 'react-bootstrap'
 import Breadcrumbs, { BreadcrumbLink } from '../components/breadcrumb';
 import { mock_services } from '../mockData'
@@ -8,7 +8,6 @@ import moment from 'moment' // для преобразования DateTimeField
 
 
 const DetailsPage: FC = () => {
-  const navigate = useNavigate();
   const { service_id } = useParams();
   const [service, setService] = useState<Service>({ id: -1, job: '', age: 14, salary: 0, date_start: ' ', date_end: ' ' });
 
@@ -31,15 +30,11 @@ const DetailsPage: FC = () => {
     { label: service.job || '', url: `/labs-bmstu-2023-dia-frontend/services/${service_id}` },
   ];
 
-  const handleButtonBackClick = () => {
-    navigate('/');
-  }
-
   return (
 
     <div className="container">
-      <Link to="/labs-bmstu-2023-dia-frontend/">
-        <Button className="btn-home btn" onClick={handleButtonBackClick}>Hазад</Button>
+      <Link to="/labs-bmstu-2023-dia-frontend/services/">
+        <Button className="btn-home btn">Hазад</Button>
       </Link>
 
       <Breadcrumbs links={breadcrumbsLinks} />
