@@ -16,9 +16,8 @@ function Header() {
 
                 <div className='page-links'>
                     <Nav.Link href="#lk">Личный кабинет</Nav.Link>
-                    <Nav.Link href="/labs-bmstu-2023-dia-frontend/">Список услуг</Nav.Link>
-                    <Nav.Link href="#list_bid">Мои заявок</Nav.Link>
-                    <Nav.Link href="#about">О компании</Nav.Link>
+                    <Nav.Link href="/labs-bmstu-2023-dia-frontend/services/">Виды деятельности</Nav.Link>
+                    <Nav.Link href="#list_bid">Мои заявки</Nav.Link>
                 </div>
             </div>
 

@@ -27,7 +27,7 @@ const DetailsPage: FC = () => {
   }, []);
 
   const breadcrumbsLinks: BreadcrumbLink[] = [
-    { label: 'Список услуг', url: '/labs-bmstu-2023-dia-frontend/' },
+    { label: 'Список услуг', url: '/labs-bmstu-2023-dia-frontend/services/' },
     { label: service.job || '', url: `/labs-bmstu-2023-dia-frontend/services/${service_id}` },
   ];
 
