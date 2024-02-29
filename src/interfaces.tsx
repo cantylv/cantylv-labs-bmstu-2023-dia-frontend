@@ -149,6 +149,7 @@ export interface SignUpProps {
 export interface getBidListProps {
   setLoaded: (is_loading: boolean) => void;
   setBids: (bids: Bid[]) => void;
+  needLoading: boolean;
 }
 
 export interface changeBidStatusProps {

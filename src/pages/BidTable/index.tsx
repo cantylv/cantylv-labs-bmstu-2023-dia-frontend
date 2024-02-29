@@ -59,8 +59,21 @@ const BidListPage = () => {
     const props: getBidListProps = {
       setLoaded: setLoaded,
       setBids: setBids,
+      needLoading: true,
     };
     getBidList(props);
+  }, []);
+
+  useEffect(() => {
+    const props: getBidListProps = {
+      setLoaded: setLoaded,
+      setBids: setBids,
+      needLoading: false,
+    };
+    const intervalId = setInterval(async () => {
+      getBidList(props);
+    }, 3000);
+    return () => clearInterval(intervalId);
   }, []);
 
   let breadcrumbsLinks: BreadcrumbLink[] = [];
@@ -152,6 +165,7 @@ const BidListPage = () => {
                                   const propsBidList: getBidListProps = {
                                     setLoaded: setLoaded,
                                     setBids: setBids,
+                                    needLoading: false,
                                   };
                                   getBidList(propsBidList);
                                 });
@@ -178,6 +192,7 @@ const BidListPage = () => {
                                   const propsBidList: getBidListProps = {
                                     setLoaded: setLoaded,
                                     setBids: setBids,
+                                    needLoading: true,
                                   };
                                   getBidList(propsBidList);
                                 });
@@ -234,6 +249,7 @@ const BidListPage = () => {
                                   const propsBidList: getBidListProps = {
                                     setLoaded: setLoaded,
                                     setBids: setBids,
+                                    needLoading: true,
                                   };
                                   getBidList(propsBidList);
                                 });
@@ -260,6 +276,7 @@ const BidListPage = () => {
                                   const propsBidList: getBidListProps = {
                                     setLoaded: setLoaded,
                                     setBids: setBids,
+                                    needLoading: true,
                                   };
                                   getBidList(propsBidList);
                                 });

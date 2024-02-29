@@ -31,7 +31,7 @@ export const getBid = async (
 
 export const getBidList = async (props: getBidListProps) => {
   try {
-    props.setLoaded(true);
+    props.setLoaded(props.needLoading);
     const response = await axios.get(`/api/v1/bids/`);
     props.setBids(response.data);
   } catch (error) {
