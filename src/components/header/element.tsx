@@ -30,7 +30,6 @@ function Header() {
 
   const draftId = useDraftId();
   const countServices = useCountServices();
-  const servicesId = useServicesId();
 
   const btnExitHandler = () => {
     try {
@@ -38,7 +37,7 @@ function Header() {
       localStorage.clear();
       dispatch(logout());
       // удалим все услуги из заявки
-      if (servicesId) {
+      if (countServices) {
         const propsDeleteAllServices: deleteAllServicesFromDraftProps = {
           draftId: draftId,
         };
