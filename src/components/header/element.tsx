@@ -4,10 +4,7 @@ import Logo from '../../assets/icons/logo.svg';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-  logout,
-  useUsername,
-} from '../../store/slices/authSlice';
+import { logout, useUsername } from '../../store/slices/authSlice';
 import axios from 'axios';
 import profile from '../../assets/profile.png';
 import Image from 'react-bootstrap/Image';
@@ -19,8 +16,8 @@ import {
   useServicesId,
 } from '../../store/slices/draftSlice';
 
-import { deleteServiceFromDraft } from '../../internal/services';
-import { deleteServiceFromDraftProps } from '../../interfaces';
+import { deleteAllServicesFromDraft } from '../../internal/services';
+import { deleteAllServicesFromDraftProps } from '../../interfaces';
 
 function Header() {
   const navigate = useNavigate();
@@ -42,13 +39,10 @@ function Header() {
       dispatch(logout());
       // удалим все услуги из заявки
       if (servicesId) {
-        servicesId.forEach((service_id) => {
-          const propsDeleteAllServices: deleteServiceFromDraftProps = {
-            serviceId: service_id,
-            draftId: draftId,
-          };
-          deleteServiceFromDraft(propsDeleteAllServices, dispatch);
-        });
+        const propsDeleteAllServices: deleteAllServicesFromDraftProps = {
+          draftId: draftId,
+        };
+        deleteAllServicesFromDraft(propsDeleteAllServices, dispatch);
       }
       navigate('/');
     } catch (error) {

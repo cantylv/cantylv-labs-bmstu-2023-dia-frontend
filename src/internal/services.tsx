@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import {
   getServicesProps,
   deleteServiceFromDraftProps,
+  deleteAllServicesFromDraftProps,
   addServiceToDraftProps,
   filterServicesProps,
   getOneServiceProps,
@@ -110,6 +111,21 @@ export const deleteServiceFromDraft = async (
     const arrayServiceId = getNumberArrayOfServicesId(response.data.services);
     dispatch(updateServicesId(arrayServiceId));
     dispatch(updateCountServices(arrayServiceId.length));
+  } catch (error) {
+    console.error('Ошибка удаления услуги из черновика', error);
+  }
+};
+
+// Удаление всех услуг из черновика пользователя
+export const deleteAllServicesFromDraft = async (
+  props: deleteAllServicesFromDraftProps,
+  dispatch: Dispatch<any>
+) => {
+  try {
+    await axios.delete(`/api/v1/bids/${props.draftId}/delete_services/`);
+    dispatch(updateDraftServices([]));
+    dispatch(updateServicesId([]));
+    dispatch(updateCountServices(0));
   } catch (error) {
     console.error('Ошибка удаления услуги из черновика', error);
   }
