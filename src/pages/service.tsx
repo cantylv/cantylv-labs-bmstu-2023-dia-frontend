@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { Button } from 'react-bootstrap'
-import Breadcrumbs, { BreadcrumbLink } from '../components/breadcrumb/';
+import Breadcrumbs, { BreadcrumbLink } from '../components/breadcrumb';
 import { mock_services } from '../mockData'
 import { Service } from "../mockData";
 import moment from 'moment' // для преобразования DateTimeField в формат day hh:mm
@@ -27,7 +27,7 @@ const DetailsPage: FC = () => {
   }, []);
 
   const breadcrumbsLinks: BreadcrumbLink[] = [
-    { label: 'Виды деятельности', url: '/' },
+    { label: 'Список услуг', url: '/' },
     { label: service.job || '', url: `/services/${service_id}` },
   ];
 
